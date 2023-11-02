@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./ProductDetails.css";
 import ProductReviewCard from "./ProductReviewCard";
+import { mens_kurta } from "../../../Data/mens_kurta";
+import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 
 const ProductDetails = () => {
   const product = {
@@ -85,6 +87,34 @@ const ProductDetails = () => {
     },
   ];
 
+  const Ratingpercentage = [
+    {
+      name: "Excellent",
+      percentage: "80%",
+      color: "bg-green-600",
+    },
+    {
+      name: "Very Good",
+      percentage: "55%",
+      color: "bg-cyan-400",
+    },
+    {
+      name: "Good",
+      percentage: "45%",
+      color: "bg-yellow-400",
+    },
+    {
+      name: "Avarage",
+      percentage: "35%",
+      color: "bg-orange-600",
+    },
+    {
+      name: "Poor",
+      percentage: "15%",
+      color: "bg-red-600",
+    },
+  ];
+
   const handleRatingClick = (newRating) => {
     if (newRating === rating) {
       setRating(newRating - 1);
@@ -101,6 +131,7 @@ const ProductDetails = () => {
   return (
     <>
       <div>
+        {/* product details */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-10 px-4 pt-10">
           {/* product image  */}
           <div className="flex flex-col items-center">
@@ -217,12 +248,59 @@ const ProductDetails = () => {
 
         {/* Rating and reviews */}
 
-        <section className="my-14">
+        <section className="flex flex-col gap-3 my-20 mx-3 lg:px-14">
           <div>
             <h1 className="text-lg font-semibold">Recent Review & Rating</h1>
           </div>
-          <div>
-            <ProductReviewCard/>
+          <div className="border border-gray-300">
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div>
+                {[1, 2, 3].map((item) => (
+                  <ProductReviewCard />
+                ))}
+              </div>
+              <div className="my-3 px-4">
+                <h1 className="font-semibold">Product Ratings</h1>
+                <div className="flex gap-2 items-center">
+                  <div className="flex text-yellow-500">
+                    <AiFillStar />
+                    <AiFillStar />
+                    <AiFillStar />
+                    <AiFillStar />
+                    <AiFillStar />
+                  </div>
+                  <div>
+                    <h1 className="opacity-70">54890 Ratings</h1>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3 mt-8">
+                  {Ratingpercentage.map((item) => (
+                    <div className="flex items-center">
+                      <div className="w-24 pr-2">
+                        <p>{item.name}</p>
+                      </div>
+                      {/* <div></div> */}
+                      <div className="h-2 bg-gray-200 w-[60%] lg:w-[40%] rounded-full">
+                        <div
+                          className={`h-2 ${item.color} rounded-full `}
+                          style={{ width: item.percentage }}
+                        ></div>
+                      </div>
+                      <span className="pl-5">{item.percentage}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* similer products */}
+
+        <section className="flex flex-col items-center lg:items-start px-10 lg:px-14 py-5">
+          <h1 className="pb-5 text-xl font-bold ml-3">Similer Products</h1>
+          <div className="flex flex-wrap space-y-5 space-x-2">
+            {mens_kurta.map((item)=><HomeSectionCard product={item}/>)}
           </div>
         </section>
       </div>

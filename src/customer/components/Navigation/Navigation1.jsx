@@ -113,7 +113,7 @@ const Navigation1 = () => {
           onClick={OpenSideBar}
         />
         <div className="flex items-center gap-2 p-5 sm:p-0 xsm:p-0">
-          <button className="hover:text-blue-700 hover:bg-pink-50 p-2 md:hidden lg:hidden xl:hidden 2xl:hidden">
+          <button className="hover:text-blue-700 hover:bg-pink-50 p-2 md:hidden lg:hidden xl:hidden 2xl:hidden" onClick={handleSignup}>
             SIGNIN
           </button>
           <CgProfile className="text-2xl md:hidden lg:hidden xl:hidden 2xl:hidden" />

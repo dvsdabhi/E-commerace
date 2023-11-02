@@ -6,6 +6,7 @@ import WomenAssessories from "../customer/components/WomenAssessories/WomenAsses
 import Product from "../customer/components/Product/Product";
 // import SignIn from "../customer/components/SignIn/SignIn";
 import ProductDetails from "../customer/components/ProductDetails/ProductDetails";
+import Cart from "../customer/components/Cart/Cart";
 const Allrouter = () => {
   return (
     <>
@@ -17,6 +18,7 @@ const Allrouter = () => {
           <Route path="/women" element={<WomenAssessories />} />
           <Route path="/product" element={<Product />} />
           <Route path="/productdetails" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </div>
     </>
