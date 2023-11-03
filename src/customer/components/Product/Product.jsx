@@ -35,28 +35,28 @@ export default function Product() {
   // },[]);
 
   const handleFilter = (value, sectionID) => {
-    console.log("value----->>>>>>>",value);
-    console.log("sectionID----->>>>>>>",sectionID);
+    // console.log("value----->>>>>>>",value);
+    // console.log("sectionID----->>>>>>>",sectionID);
     const searchParamms = new URLSearchParams(location.search);
-    console.log("searchParamms--->>>", searchParamms.get("color"));
+    // console.log("searchParamms--->>>", searchParamms.get("color"));
     let filterValue = searchParamms.getAll(sectionID);
-    console.log("filterValue", filterValue);
+    // console.log("filterValue", filterValue);
     // console.log("split values++++",filterValue.split(","))
     if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
       filterValue = filterValue[0]
         .split(",")
         .filter((item) => item !==value);
-        console.log("value delete---->>>>>",filterValue);
+        // console.log("value delete---->>>>>",filterValue);
       if (filterValue.length === 0) {
-        console.log("heloooooooooooooo",location.search);
+        // console.log("heloooooooooooooo",location.search);
         searchParamms.delete(sectionID);
-        console.log("heloooooooooooooo",location.search);
+        // console.log("heloooooooooooooo",location.search);
 
       }
     } else {
       filterValue.push(value);
     }
-    console.log("filterValue---------", filterValue);
+    // console.log("filterValue---------", filterValue);
 
     if (filterValue.length > 0) {
       searchParamms.set(sectionID, filterValue.join(","));

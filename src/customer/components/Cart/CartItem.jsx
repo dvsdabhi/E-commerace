@@ -4,7 +4,7 @@ import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 const CartItem = () => {
   return (
     <>
-      <div className="shadow-xl p-5 border rounded-md">
+      <div className="shadow-custom p-5 border rounded-md">
         <div className="flex items-center">
           <div className="h-[5rem] w-[5rem] lg:h-[9rem] lg:w-[9rem]">
             <img

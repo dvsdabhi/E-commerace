@@ -10,7 +10,7 @@ const WomenAssessories = ({
 }) => {
   const Data = [];
   navigation.categories.map((category) => {
-    console.log(category);
+    // console.log(category);
     if (category.id === Id) {
       Data.push(category);
     }

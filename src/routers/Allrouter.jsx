@@ -7,6 +7,9 @@ import Product from "../customer/components/Product/Product";
 // import SignIn from "../customer/components/SignIn/SignIn";
 import ProductDetails from "../customer/components/ProductDetails/ProductDetails";
 import Cart from "../customer/components/Cart/Cart";
+import Checkout from "../customer/components/Checkout/Checkout";
+import Order from "../customer/components/Order/Order";
+import OrderDetails from "../customer/components/Order/OrderDetails";
 const Allrouter = () => {
   return (
     <>
@@ -19,6 +22,9 @@ const Allrouter = () => {
           <Route path="/product" element={<Product />} />
           <Route path="/productdetails" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order" element={<Order />} />
+          <Route path="/orderdetails" element={<OrderDetails />} />
         </Routes>
       </div>
     </>

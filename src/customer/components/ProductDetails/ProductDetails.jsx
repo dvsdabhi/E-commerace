@@ -124,7 +124,7 @@ const ProductDetails = () => {
   };
 
   const handlerSelect = (e) => {
-    console.log("selekbmgkvcbvckbjgf", e.target.value);
+    // console.log("selekbmgkvcbvckbjgf", e.target.value);
     setSelectedOption(e.target.value);
   };
 

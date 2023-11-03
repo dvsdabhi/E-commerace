@@ -4,11 +4,11 @@ import CartItem from "./CartItem";
 const Cart = () => {
   return (
     <>
-      <div className="lg:grid grid-cols-3 lg:px-16 relative">
+      <div className="lg:grid grid-cols-3 lg:px-16 relative mt-3 space-x-5">
         <div className="col-span-2 space-y-2">
           {[1,4,5,6,7].map((item)=><CartItem />)}
         </div>
-        <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
+        <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0 shadow-custom">
           <div className="">
             <p className="uppercase opacity-60 font-bold pb-4">Price Details</p>
             <hr />
