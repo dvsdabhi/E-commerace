@@ -4,6 +4,7 @@ import "./ProductDetails.css";
 import ProductReviewCard from "./ProductReviewCard";
 import { mens_kurta } from "../../../Data/mens_kurta";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetails = () => {
   const product = {
@@ -58,6 +59,8 @@ const ProductDetails = () => {
 
   const [rating, setRating] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
+
+  const navigate = useNavigate();
 
   const startArray = [
     {
@@ -126,6 +129,10 @@ const ProductDetails = () => {
   const handlerSelect = (e) => {
     // console.log("selekbmgkvcbvckbjgf", e.target.value);
     setSelectedOption(e.target.value);
+  };
+
+  const handleAddToCart = () => {
+    navigate("/cart");
   };
 
   return (
@@ -220,7 +227,10 @@ const ProductDetails = () => {
                   ))}
                 </div>
 
-                <button className="bg-violet-500 text-white p-3 rounded-lg">
+                <button
+                  onClick={handleAddToCart}
+                  className="bg-violet-500 text-white p-3 rounded-lg"
+                >
                   ADD TO CART
                 </button>
               </form>
@@ -300,7 +310,9 @@ const ProductDetails = () => {
         <section className="flex flex-col items-center lg:items-start px-10 lg:px-14 py-5">
           <h1 className="pb-5 text-xl font-bold ml-3">Similer Products</h1>
           <div className="flex flex-wrap space-y-5 space-x-2">
-            {mens_kurta.map((item)=><HomeSectionCard product={item}/>)}
+            {mens_kurta.map((item) => (
+              <HomeSectionCard product={item} />
+            ))}
           </div>
         </section>
       </div>

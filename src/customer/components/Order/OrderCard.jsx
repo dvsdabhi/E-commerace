@@ -1,9 +1,14 @@
 import React from "react";
 import { MdOutlineAdjust } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+
 const OrderCard = () => {
+
+  const navigate = useNavigate();
+
   return (
     <>
-      <div className="grid grid-cols-3 shadow-custom hover:shadow-xl p-3">
+      <div onClick={()=>navigate(`/account/order/${5}`)} className="grid grid-cols-3 shadow-custom hover:shadow-xl p-3">
         <div className="flex space-x-4 cursor-pointer">
           <img
             src="https://rukminim1.flixcart.com/image/612/612/xif0q/kurta/z/l/b/xl-grey-sws2902-allan-peter-original-imag3y6tzaaxwkhy-bb.jpeg?q=70"

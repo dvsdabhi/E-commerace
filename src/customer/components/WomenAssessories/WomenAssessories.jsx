@@ -1,6 +1,6 @@
 import React from "react";
 import { navigation } from "../../../Data/NavbarData";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const WomenAssessories = ({
   setWomenAccessories,
@@ -22,7 +22,7 @@ const WomenAssessories = ({
   return (
     <>
       <div
-        className="flex justify-between w-full bg-white py-16 px-24 absolute z-50 mt-16 sm:hidden xsm:hidden md:flex xl:flex 2xl:flex shadow-2xl"
+        className="flex justify-between w-full bg-white py-16 px-24 absolute z-50 mt-0 sm:hidden xsm:hidden md:flex xl:flex 2xl:flex shadow-2xl"
         onMouseLeave={() => {
           handleMouseLeave();
           setID("");
@@ -31,17 +31,29 @@ const WomenAssessories = ({
         <div className="flex justify-around w-full">
           {Data.map((category) => (
             <>
-              <div className="flex justify-around w-full">
+              <div key={category.name} className="flex justify-around w-full">
                 {category.sections.map((product) => (
-                  <div className="">
-                    <h1 className="font-bold px-1">{product.name}</h1>
-                    <div className="flex flex-col gap-3 py-3 text-gray-500">
+                  <div key={product.name} className="">
+                    <p
+                      id={`${product.name}-heading`}
+                      className="font-bold px-1"
+                    >
+                      {product.name}
+                    </p>
+                    <div
+                      aria-labelledby={`${product.name}-heading`}
+                      className="flex flex-col gap-3 py-3 text-gray-500"
+                    >
                       {product.items.map((data) => (
                         <>
                           <div className="flex px-1">
                             <ul className="">
-                              <li>
-                                <Link>{data.name}</Link>
+                              <li key={data.name}>
+                                <Link
+                                  to={`/${category.id}/${product.id}/${data.name}`}
+                                >
+                                  {data.name}
+                                </Link>
                               </li>
                             </ul>
                           </div>

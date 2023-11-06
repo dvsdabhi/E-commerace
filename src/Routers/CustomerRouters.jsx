@@ -10,22 +10,31 @@ import Cart from "../customer/components/Cart/Cart";
 import Checkout from "../customer/components/Checkout/Checkout";
 import Order from "../customer/components/Order/Order";
 import OrderDetails from "../customer/components/Order/OrderDetails";
+import Navigation1 from "../customer/components/Navigation/Navigation1";
+import Footer from "../customer/components/Footer/Footer";
 const Allrouter = () => {
   return (
     <>
       <div>
+        <div>
+          <Navigation1 />
+        </div>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={<SignIn />} /> */}
-          <Route path="/women" element={<WomenAssessories />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/productdetails" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route
+            path="/:lavelOne/:lavelTwo/:lavelThree"
+            element={<Product />}
+          />
+          {/* <Route path="/women" element={<WomenAssessories />} /> */}
+          <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/orderdetails" element={<OrderDetails />} />
+          <Route path="/account/order" element={<Order />} />
+          <Route path="/account/order/:orderId" element={<OrderDetails />} />
         </Routes>
+      </div>
+      <div>
+        <Footer />
       </div>
     </>
   );

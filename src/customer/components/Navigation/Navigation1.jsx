@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../Asset/Logo/logo.png";
 import { FiSearch } from "react-icons/fi";
 import { HiOutlineShoppingBag } from "react-icons/hi";
@@ -10,6 +10,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import WomenAssessories from "../WomenAssessories/WomenAssessories";
 import Signup from "../Signup/Signup";
 import SignIn from "../SignIn/SignIn";
+import UserProfile from "../Profile/UserProfile";
 
 const Navigation1 = () => {
   const [OpenMenu, setOpenMenu] = useState(false);
@@ -17,9 +18,16 @@ const Navigation1 = () => {
   const [Id, setID] = useState("");
   const [signup, setSignup] = useState(false);
   const [signInbox, setSignin] = useState(false);
+  const [userProfile, setUserProfile] = useState(false);
+
+  const navigate = useNavigate();
 
   const OpenSideBar = () => {
     setOpenMenu(true);
+  };
+
+  const handleUserProfile = () => {
+    setUserProfile(!userProfile);
   };
 
   const handleSignup = () => {
@@ -94,7 +102,10 @@ const Navigation1 = () => {
             >
               SIGNIN
             </button>
-            <CgProfile className="text-2xl" />
+            <CgProfile
+              onClick={handleUserProfile}
+              className="text-2xl cursor-pointer"
+            />
             <div className="flex border rounded-lg p-2">
               <input
                 type="text"
@@ -105,7 +116,12 @@ const Navigation1 = () => {
                 <FiSearch className="cursor-pointer text-2xl text-gray-500" />
               </span>
             </div>
-            <HiOutlineShoppingBag className="text-2xl text-gray-500" />
+            <HiOutlineShoppingBag
+              onClick={() => {
+                navigate("/cart");
+              }}
+              className="text-2xl text-gray-500 cursor-pointer"
+            />
           </div>
         </div>
         <FiMenu
@@ -113,11 +129,14 @@ const Navigation1 = () => {
           onClick={OpenSideBar}
         />
         <div className="flex items-center gap-2 p-5 sm:p-0 xsm:p-0">
-          <button className="hover:text-blue-700 hover:bg-pink-50 p-2 md:hidden lg:hidden xl:hidden 2xl:hidden" onClick={handleSignup}>
+          <button
+            className="hover:text-blue-700 hover:bg-pink-50 p-2 md:hidden lg:hidden xl:hidden 2xl:hidden"
+            onClick={handleSignup}
+          >
             SIGNIN
           </button>
           <CgProfile className="text-2xl md:hidden lg:hidden xl:hidden 2xl:hidden" />
-          <FaCartShopping className="text-xl md:hidden lg:hidden xl:hidden 2xl:hidden" />
+          <FaCartShopping className="text-xl md:hidden lg:hidden xl:hidden 2xl:hidden cursor-pointer" />
         </div>
         {signup && (
           <Signup signup={signup} setSignup={setSignup} setSignin={setSignin} />
@@ -133,6 +152,7 @@ const Navigation1 = () => {
           setID={setID}
         />
       )}
+      {userProfile && <UserProfile setUserProfile={setUserProfile} />}
     </>
   );
 };
