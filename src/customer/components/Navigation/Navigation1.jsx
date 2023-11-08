@@ -44,7 +44,9 @@ const Navigation1 = () => {
         <div className="flex w-full items-center sm:hidden xsm:hidden md:flex 2xl:flex">
           <div className="flex w-full gap-10 md:gap-5 items-center">
             <div>
-              <img src={logo} alt="" className="h-10" />
+              <Link to="/">
+                <img src={logo} alt="" className="h-10" />
+              </Link>
             </div>
             <div>
               <ul className="flex justify-evenly gap-7 md:gap-3">
