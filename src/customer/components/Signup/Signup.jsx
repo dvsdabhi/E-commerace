@@ -3,6 +3,9 @@ import SignIn from "../SignIn/SignIn";
 import { AiOutlineCloseSquare } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { checkAuth } from "../../../redux/features/Auth.js";
+import { signUp } from "../../utils/queries";
 
 const Signup = ({ signup, setSignup, setSignin }) => {
   const [signUpData, setSignUpData] = useState({
@@ -13,29 +16,32 @@ const Signup = ({ signup, setSignup, setSignin }) => {
     confirmPassword: "",
   });
 
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignUpData({ ...signUpData, [name]: value });
   };
 
-  const onSignUp = (e) => {
+  const onSignUp = async (e) => {
     e.preventDefault();
     if (signUpData.password === signUpData.confirmPassword) {
       try {
-        axios
-          .post("http://localhost:8080/api/auth/signup", signUpData)
-          .then((response) => {
-            console.log(response.data);
-            if (response.data.status === 200) {
-              toast.success("register success");
-              setTimeout(() => {
-                setSignup(false);
-              }, 1000);
-            }
-          });
+        const res = await signUp(signUpData);
+        console.log(res.data);
+        if (res.data.status === 200) {
+          localStorage.setItem("authToken", res.data.token);
+          const token = localStorage.getItem("authToken");
+          if (token != null) {
+            dispatch(checkAuth(true));
+            toast.success("register success");
+            setTimeout(() => {
+              setSignup(false);
+            }, 1000);
+          }
+        }
       } catch (error) {
-        console.error("Signup failed", error);
-        // toast(error.message);
+        toast.error(error.response.data.message);
       }
     } else {
       toast.error("password and confirm-password does not match");

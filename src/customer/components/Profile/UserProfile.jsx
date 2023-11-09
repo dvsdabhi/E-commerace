@@ -1,12 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { checkAuth } from "../../../redux/features/Auth";
 
 const UserProfile = ({ setUserProfile }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOrder = () => {
     navigate("/account/order");
     setUserProfile(false);
+  };
+
+  const handleLogOut = async () => {
+    localStorage.removeItem("authToken");
+    dispatch(checkAuth());
+    setUserProfile(false);
+    navigate("/");
   };
 
   return (
@@ -18,7 +28,9 @@ const UserProfile = ({ setUserProfile }) => {
             <button onClick={handleOrder} className="hover:bg-gray-200">
               My Orders
             </button>
-            <button className="hover:bg-gray-200">Logout</button>
+            <button onClick={handleLogOut} className="hover:bg-gray-200">
+              Logout
+            </button>
           </div>
         </div>
       </div>

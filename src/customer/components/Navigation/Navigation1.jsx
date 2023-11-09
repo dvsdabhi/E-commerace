@@ -11,6 +11,7 @@ import WomenAssessories from "../WomenAssessories/WomenAssessories";
 import Signup from "../Signup/Signup";
 import SignIn from "../SignIn/SignIn";
 import UserProfile from "../Profile/UserProfile";
+import { useSelector } from "react-redux";
 
 const Navigation1 = () => {
   const [OpenMenu, setOpenMenu] = useState(false);
@@ -21,6 +22,8 @@ const Navigation1 = () => {
   const [userProfile, setUserProfile] = useState(false);
 
   const navigate = useNavigate();
+  const isLogin = useSelector((state)=>state.auth.isAuth);
+  // console.log(selector);
 
   const OpenSideBar = () => {
     setOpenMenu(true);
@@ -98,16 +101,20 @@ const Navigation1 = () => {
         </div>
         <div className="flex w-full items-center sm:hidden xsm:hidden md:flex 2xl:flex">
           <div className="flex w-full gap-10 md:gap-5 justify-end items-center">
-            <button
-              className="hover:text-blue-700 hover:bg-pink-50 p-2"
-              onClick={handleSignup}
-            >
-              SIGNIN
-            </button>
-            <CgProfile
+            {isLogin ? <CgProfile
               onClick={handleUserProfile}
               className="text-2xl cursor-pointer"
-            />
+            />:<button
+            className="hover:text-blue-700 hover:bg-pink-50 p-2"
+            onClick={handleSignup}
+          >
+            SIGNIN
+          </button>}
+            
+            {/* <CgProfile
+              onClick={handleUserProfile}
+              className="text-2xl cursor-pointer"
+            /> */}
             <div className="flex border rounded-lg p-2">
               <input
                 type="text"

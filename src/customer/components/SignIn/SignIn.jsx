@@ -1,7 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineCloseSquare } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { checkAuth } from "../../../redux/features/Auth";
+import { toast } from "react-toastify";
+import { signIn } from "../../utils/queries";
 
 const SignIn = ({ setSignup, setSignin }) => {
+  const [signInData, setSignInData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSignInData({ ...signInData, [name]: value });
+  };
+
+  const onSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await signIn(signInData);
+      if (res.data.status === 200) {
+        localStorage.setItem("authToken", res.data.token);
+        dispatch(checkAuth());
+        toast.success("login success");
+        setTimeout(() => {
+          setSignin(false);
+        }, 1000);
+        console.log(res.data);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   const handleSignup = () => {
     setSignup(true);
     setSignin(false);
@@ -13,18 +47,28 @@ const SignIn = ({ setSignup, setSignin }) => {
         <div className="flex justify-center border p-10 rounded-lg shadow-2xl xsm:p-5 bg-white">
           <div className="flex flex-col items-center gap-3">
             <div className="flex w-full justify-end">
-              <AiOutlineCloseSquare className="cursor-pointer text-2xl" onClick={()=>{setSignin(false)}}/>
+              <AiOutlineCloseSquare
+                className="cursor-pointer text-2xl"
+                onClick={() => {
+                  setSignin(false);
+                }}
+              />
             </div>
-            <form action="" className="flex flex-col gap-5">
+            <form onSubmit={onSignIn} className="flex flex-col gap-5">
               <input
+                onChange={handleChange}
+                name="email"
+                value={signInData.value}
                 type="email"
                 placeholder="Email"
                 className="p-3 border rounded-lg hover:border focus:border-violet-700 outline-none"
                 required
               />
               <input
+                onChange={handleChange}
+                name="password"
+                value={signInData.password}
                 type="password"
-                name=""
                 id=""
                 placeholder="Password"
                 className="p-3 border rounded-lg hover:border focus:border-violet-700 outline-none"
