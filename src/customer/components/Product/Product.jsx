@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/20/solid";
 import ProdactCard from "./ProdactCard";
 import { mens_kurta } from "../../../Data/mens_kurta";
+import { getAllProduct } from "../../utils/queries.js";
 import { filters, singleFilter } from "./FilterData";
 import { IoFilterSharp } from "react-icons/io5";
 // import { URLSearchParams } from "url";
@@ -26,6 +27,7 @@ function classNames(...classes) {
 
 export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [allProductData,setAllProductData] = useState([]);
   // const [searchParamms,setSearchParamms] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,15 +45,12 @@ export default function Product() {
     // console.log("filterValue", filterValue);
     // console.log("split values++++",filterValue.split(","))
     if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
-      filterValue = filterValue[0]
-        .split(",")
-        .filter((item) => item !==value);
-        // console.log("value delete---->>>>>",filterValue);
+      filterValue = filterValue[0].split(",").filter((item) => item !== value);
+      // console.log("value delete---->>>>>",filterValue);
       if (filterValue.length === 0) {
         // console.log("heloooooooooooooo",location.search);
         searchParamms.delete(sectionID);
         // console.log("heloooooooooooooo",location.search);
-
       }
     } else {
       filterValue.push(value);
@@ -65,12 +64,24 @@ export default function Product() {
     navigate({ search: `?${query}` });
   };
 
-  const handleRadioFilterChange = (e,sectionID) => {
+  const handleRadioFilterChange = (e, sectionID) => {
     const searchParamms = new URLSearchParams(location.search);
-    searchParamms.set(sectionID,e.target.value);
+    searchParamms.set(sectionID, e.target.value);
     const query = searchParamms.toString();
-    navigate({search:`${query}`});
+    navigate({ search: `${query}` });
+  };
+
+  const get_All_Product = async()=> {
+    const res = await getAllProduct();
+    console.log("response-------->>>>>>>>>>",res.data.product);
+    setAllProductData(res.data.product);
   }
+
+  useEffect(()=>{
+    get_All_Product();
+  },[]);
+  
+  // console.log("allProductData=--=-=-=-=-=-=-=-",allProductData[1].title);
 
   return (
     <div className="bg-white">
@@ -261,7 +272,6 @@ export default function Product() {
             </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
-              
               {/* Filters */}
               <div>
                 <div className="flex justify-between items-center py-10">
@@ -367,7 +377,9 @@ export default function Product() {
                                   className="flex items-center"
                                 >
                                   <input
-                                  onChange={(e)=>{handleRadioFilterChange(e,section.id)}}
+                                    onChange={(e) => {
+                                      handleRadioFilterChange(e, section.id);
+                                    }}
                                     id={`filter-${section.id}-${optionIdx}`}
                                     name={`${section.id}[]`}
                                     defaultValue={option.value}
@@ -395,7 +407,7 @@ export default function Product() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-5">
-                  {mens_kurta.map((item) => (
+                  {allProductData.map((item) => (
                     <ProdactCard product={item} />
                   ))}
                 </div>

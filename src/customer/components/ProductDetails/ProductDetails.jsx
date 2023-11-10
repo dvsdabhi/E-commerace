@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import "./ProductDetails.css";
 import ProductReviewCard from "./ProductReviewCard";
 import { mens_kurta } from "../../../Data/mens_kurta";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getSingleProduct } from "../../utils/queries";
 
 const ProductDetails = () => {
   const product = {
@@ -59,8 +60,23 @@ const ProductDetails = () => {
 
   const [rating, setRating] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
+  const [singleProductData,setSingleProductData] = useState();
 
   const navigate = useNavigate();
+  const params = useParams();
+  console.log("params----------", params.productId);
+
+  const get_single_Product = async () => {
+    const res = await getSingleProduct(params.productId);
+    setSingleProductData(res.data.singleProduct);
+    // console.log("res-------->>>>>>>>>", res.data.singleProduct);
+  };
+
+  useEffect(() => {
+    get_single_Product();
+  }, []);
+
+  console.log("singleProductData---------->>>>>",singleProductData);
 
   const startArray = [
     {
