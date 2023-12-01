@@ -73,7 +73,7 @@ export default function Product() {
 
   const get_All_Product = async()=> {
     const res = await getAllProduct();
-    console.log("response-------->>>>>>>>>>",res.data.product);
+    // console.log("response-------->>>>>>>>>>",res.data.product);
     setAllProductData(res.data.product);
   }
 

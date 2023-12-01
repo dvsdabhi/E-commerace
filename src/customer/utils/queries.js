@@ -28,10 +28,24 @@ export const getAllProduct = async () => {
 };
 
 // get Single product api.
-
+const token = localStorage.getItem("authToken");
 export const getSingleProduct = async (productID) => {
   const response = await axios.get(
     `http://localhost:8080/api/admin/get/single/product/${productID}`
   );
   return response;
+};
+
+
+
+// remove cartProduct
+export const removeCartProduct = async (id) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/cartitem/${id}`
+    );
+    return response;
+  } catch (error) {
+    console.log("delete error", error);
+  }
 };
