@@ -1,31 +1,85 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddressCard from "../AddressCard/AddressCard";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const DeliveryAddressForm = () => {
-    const [showAddress,setAddressData] = useState(false);
+  const [showAddress, setAddressData] = useState(false);
+  const [address, setAddress] = useState();
+  const [selectAddress, setSelectAddress] = useState();
+
   const [formData, setFormData] = useState({
-    FirstName: "",
-    LastName: "",
-    Address: "",
-    City: "",
-    State: "",
-    Pincode: "",
-    PhoneNumber: "",
+    firstName: "",
+    lastName: "",
+    streetAddress: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    mobile: "",
   });
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // console.log("address");
-    console.log("data---->>>>",formData);
-    setAddressData(true);
+    // console.log("data---->>>>", formData);
+    // setAddressData(true);
   };
 
+  const token = localStorage.getItem("authToken");
+
   const handleChange = (e) => {
-    const {name,value} = e.target;
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  
+  const handleDelivery = async () => {
+    navigate("/checkout?step=3");
+  };
+
+  const handleAddAddress = async () => {
+    console.log("token", token);
+    console.log("formData---", formData);
+    const response = await axios.post(
+      `http://localhost:8080/api/address`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log("response------", response);
+  };
+
+  const handleAddress = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/userAddress",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAddress(response.data.Address);
+      response.data.Address.map((item) => {
+        if (item.select === true) {
+          setAddressData(true);
+        }
+      });
+      // console.log("--------------------", response.data.Address);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    handleAddress();
+  }, [selectAddress]);
+
+  // console.log("address", selectAddress);
+
+  // console.log("-==-=-=-===-=-=-=-=-",showAddress);
 
   return (
     <>
@@ -33,10 +87,18 @@ const DeliveryAddressForm = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className="grid border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll">
             <div className="p-5 py-7 border-b cursor-pointer">
-              <AddressCard formData={formData} showAddress={showAddress}/>
-              <button className="bg-violet-600 hover:bg-blue-600 text-white p-3 px-6 rounded-md mt-2">
-                Deliver Here
-              </button>
+              <AddressCard
+                address={address}
+                setSelectAddress={setSelectAddress}
+              />
+              {showAddress && (
+                <button
+                  className="bg-violet-600 hover:bg-blue-600 text-white p-3 px-6 rounded-md mt-2"
+                  onClick={handleDelivery}
+                >
+                  Deliver to this address
+                </button>
+              )}
             </div>
           </div>
           <div>
@@ -47,8 +109,8 @@ const DeliveryAddressForm = () => {
                     type="text"
                     placeholder="First Name *"
                     id="FirstName"
-                    name="FirstName"
-                    value={formData.FirstName}
+                    name="firstName"
+                    value={formData.firstName}
                     className="border-2 outline-none rounded-md p-2 w-full"
                     onChange={handleChange}
                     required
@@ -57,16 +119,16 @@ const DeliveryAddressForm = () => {
                     type="text"
                     placeholder="Last Name *"
                     id="LastName"
-                    name="LastName"
-                    value={formData.LastName}
+                    name="lastName"
+                    value={formData.lastName}
                     className="border-2 outline-none rounded-md p-2 w-full"
                     onChange={handleChange}
                     required
                   />
                 </div>
                 <textarea
-                  name="Address"
-                  value={formData.Address}
+                  name="streetAddress"
+                  value={formData.streetAddress}
                   id="Address"
                   cols="30"
                   rows="10"
@@ -79,8 +141,8 @@ const DeliveryAddressForm = () => {
                     type="text"
                     placeholder="City *"
                     id="City"
-                    name="City"
-                    value={formData.City}
+                    name="city"
+                    value={formData.city}
                     className="border-2 outline-none rounded-md p-2 w-full"
                     onChange={handleChange}
                     required
@@ -89,8 +151,8 @@ const DeliveryAddressForm = () => {
                     type="text"
                     placeholder="State/Province/Region *"
                     id="State"
-                    name="State"
-                    value={formData.State}
+                    name="state"
+                    value={formData.state}
                     className="border-2 outline-none rounded-md p-2 w-full"
                     onChange={handleChange}
                     required
@@ -101,8 +163,8 @@ const DeliveryAddressForm = () => {
                     type="number"
                     placeholder="Zip / Postal code *"
                     id="Pincode"
-                    name="Pincode"
-                    value={formData.Pincode}
+                    name="zipCode"
+                    value={formData.zipCode}
                     className="border-2 outline-none rounded-md p-2 w-full"
                     onChange={handleChange}
                     required
@@ -111,8 +173,8 @@ const DeliveryAddressForm = () => {
                     type="number"
                     placeholder="Phone Number *"
                     id="PhoneNumber"
-                    name="PhoneNumber"
-                    value={formData.PhoneNumber}
+                    name="mobile"
+                    value={formData.mobile}
                     className="border-2 outline-none rounded-md p-2 w-full"
                     onChange={handleChange}
                     required
@@ -121,6 +183,7 @@ const DeliveryAddressForm = () => {
                 <button
                   className="bg-violet-600 hover:bg-blue-600 text-white p-3 px-6 rounded-md mt-2"
                   type="submit"
+                  onClick={handleAddAddress}
                 >
                   Deliver Here
                 </button>

@@ -1,25 +1,58 @@
+import axios from "axios";
 import React from "react";
 
-const AddressCard = ({ formData,showAddress }) => {
-  console.log("formData-->>",formData);
+const AddressCard = ({ address, setSelectAddress }) => {
+  const token = localStorage.getItem("authToken");
+
+  const handleSelectAddress = async (id) => {
+    console.log("id", id);
+    const response = await axios.put(
+      "http://localhost:8080/api/selectAddress",
+      { _id: id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("response", response);
+    setSelectAddress(id);
+  };
+
   return (
     <>
       <div>
-        {/* {showAddress &&  */}
-          <div className="space-y-3">
-            {/* <p className="font-semibold">{formData.FirstName}</p> */}
-            <p className="font-semibold">Divyesh</p>
-            {/* <p>
-              {formData.Address} ,{formData.Pincode}
-            </p> */}
-            <p>Surat,395004</p>
+        {address?.map((item) => (
+          <div key={item._id} className="space-y-3 my-3">
+            <p className="font-semibold">
+              {item.firstName} {item.lastName}
+            </p>
+            <p>
+              {item.streetAddress} ,{item.zipCode}
+            </p>
             <div className="space-y-1">
               <p className="font-semibold">Phone Number</p>
-              {/* <p>{formData.PhoneNumber}</p> */}
-              <p>1258974563</p>
+              <p>{item.mobile}</p>
             </div>
+            {item.select === true ? (
+              <button
+                className="border rounded-lg p-3 bg-green-600 hover:bg-green-500 text-white"
+                onClick={() => handleSelectAddress(item._id)}
+              >
+                {item.select === true ? "Address Selected" : "Select Address"}
+              </button>
+            ) : (
+              <button
+                className="border rounded-lg p-3 bg-violet-600 hover:bg-violet-500 text-white"
+                onClick={() => handleSelectAddress(item._id)}
+              >
+                {item.select === true ? "Address Selected" : "Select Address"}
+              </button>
+            )}
+            <hr className="border border-black" />
           </div>
-        {/* } */}
+        ))}
+        {/* )} */}
       </div>
     </>
   );

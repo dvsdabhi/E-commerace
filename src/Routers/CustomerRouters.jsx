@@ -12,6 +12,7 @@ import Order from "../customer/components/Order/Order";
 import OrderDetails from "../customer/components/Order/OrderDetails";
 import Navigation1 from "../customer/components/Navigation/Navigation1";
 import Footer from "../customer/components/Footer/Footer";
+import OrderSummary from "../customer/components/Checkout/OrderSummary";
 const Allrouter = () => {
   return (
     <>
@@ -31,6 +32,7 @@ const Allrouter = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/account/order" element={<Order />} />
           <Route path="/account/order/:orderId" element={<OrderDetails />} />
+          <Route path="/ordersummary" element={<OrderSummary />} />
         </Routes>
       </div>
       <div>

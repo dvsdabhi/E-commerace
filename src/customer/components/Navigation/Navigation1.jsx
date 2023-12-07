@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../Asset/Logo/logo.png";
+import logo from "../../Asset/Logo/logo2.png";
 import { FiSearch } from "react-icons/fi";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { CgProfile } from "react-icons/cg";
@@ -48,7 +48,7 @@ const Navigation1 = () => {
           <div className="flex w-full gap-10 md:gap-5 items-center">
             <div>
               <Link to="/">
-                <img src={logo} alt="" className="h-10" />
+                <img src={logo} alt="" className="h-20 w-24" />
               </Link>
             </div>
             <div>

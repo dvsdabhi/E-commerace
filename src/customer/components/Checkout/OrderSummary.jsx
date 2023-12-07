@@ -1,18 +1,103 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AddressCard from "../AddressCard/AddressCard";
 import CartItem from "../Cart/CartItem";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const OrderSummary = () => {
+  const [address, setAddress] = useState({});
+  const [buyProduct, setBuyProduct] = useState();
+  const [totalItem, setTotalItem] = useState();
+  const [subTotalPrice, setSubTotalPrice] = useState();
+  const [totalPrice, setTotalPrice] = useState();
+
+  const token = localStorage.getItem("authToken");
+  const navigate = useNavigate();
+
+
+  const handleDelivery = async () => {
+    navigate("/checkout?step=4",{ state: { data: totalPrice.toFixed(0) } });
+  };
+
+  const handleAddress = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/api/orderSummaryAdd",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response.data.address);
+    setAddress(response.data.address[0]);
+  };
+
+  const showBuyProduct = async () => {
+    const response = await axios.get("http://localhost:8080/api/cartitem", {
+      headers: { 
+        Authorization: `Bearer ${token}` 
+      },
+    });
+    setBuyProduct(response.data.cartProduct);
+    let totalItem = response.data.cartProduct.reduce((acc,tot)=>{
+      return acc + tot.quantity
+    },0);
+
+    let price = response.data.cartProduct.reduce((acc, tot) => {
+      return acc + tot.price * tot.quantity;
+    }, 0);
+
+    let totalPrice = response.data.cartProduct.reduce((acc, tot) => {
+      return acc + tot.product.discountedPrice * tot.quantity;
+    }, 0);
+
+    setTotalItem(totalItem);
+    setSubTotalPrice(price);
+    setTotalPrice(totalPrice);
+  };
+
+  useEffect(() => {
+    handleAddress();
+    showBuyProduct();
+  }, []);
+
+  console.log("address", buyProduct);
   return (
     <>
       <div className="flex flex-col space-y-8">
         <div className="p-5 shadow-lg rounded-s-md border">
-          <AddressCard />
+          {/* <AddressCard address={address}/> */}
+          <p className="font-semibold">
+            {address.firstName} {address.lastName}
+          </p>
+          <p>
+            {address.streetAddress} ,{address.zipCode}
+          </p>
+          <div className="space-y-1">
+            <p className="font-semibold">Phone Number</p>
+            <p>{address.mobile}</p>
+          </div>
         </div>
         <div className="lg:grid grid-cols-3 relative lg:space-x-5">
           <div className="col-span-2 space-y-5">
-            {[1, 4, 5, 6, 7].map((item) => (
-              <CartItem />
+            {buyProduct?.map((item) => (
+              <div className="shadow-custom p-5 border rounded-md">
+                <div className="flex items-center">
+                  <div className="h-[5rem] w-[5rem] lg:h-[9rem] lg:w-[9rem]">
+                    <img
+                      className="object-cover object-top w-full h-full"
+                      src={item.product?.imageUrl}
+                      alt=""
+                    />
+                  </div>
+                  <div className="ml-5 space-y-1">
+                    <p className="font-semibold">{item.product?.title}</p>
+                    <p className="opacity-70">Size : {item.size},White</p>
+                    <p className="">Price : {item.product?.discountedPrice}</p>
+                    <p>Quantity : {item.quantity}</p>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
           <div className="h-fit py-3 px-5 sticky top-0 mt-5 lg:mt-0 shadow-custom">
@@ -23,12 +108,12 @@ const OrderSummary = () => {
               <hr />
               <div className="space-y-3 mb-10">
                 <div className="flex justify-between pt-3 text-black">
-                  <span>Price (3 item)</span>
-                  <span>₹2499</span>
+                  <span>Price ({totalItem} item)</span>
+                  <span>₹{subTotalPrice}</span>
                 </div>
                 <div className="flex justify-between pt-3">
                   <span>Disccount</span>
-                  <span className="text-green-700">-₹629</span>
+                  <span className="text-green-700">-₹{subTotalPrice-totalPrice?.toFixed(0)}</span>
                 </div>
 
                 <div className="flex justify-between pt-3">
@@ -37,11 +122,11 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between pt-3 font-bold">
                   <span>Total Amount</span>
-                  <span className="text-green-700">₹629</span>
+                  <span className="text-green-700">₹{totalPrice?.toFixed(0)}</span>
                 </div>
               </div>
-              <button className="bg-violet-500 text-white w-full p-2 rounded-md">
-                CHECK OUT
+              <button className="bg-violet-500 text-white w-full p-2 rounded-md" onClick={handleDelivery}>
+                Payment
               </button>
             </div>
           </div>
