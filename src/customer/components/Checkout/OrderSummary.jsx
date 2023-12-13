@@ -14,10 +14,9 @@ const OrderSummary = () => {
   const token = localStorage.getItem("authToken");
   const navigate = useNavigate();
 
-
-  const handleDelivery = async () => {
-    navigate("/checkout?step=4",{ state: { data: totalPrice.toFixed(0) } });
-  };
+  // const handleDelivery = async () => {
+  //   navigate("/checkout?step=4", { state: { data: totalPrice.toFixed(0) } });
+  // };
 
   const handleAddress = async () => {
     const response = await axios.get(
@@ -34,14 +33,14 @@ const OrderSummary = () => {
 
   const showBuyProduct = async () => {
     const response = await axios.get("http://localhost:8080/api/cartitem", {
-      headers: { 
-        Authorization: `Bearer ${token}` 
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     });
     setBuyProduct(response.data.cartProduct);
-    let totalItem = response.data.cartProduct.reduce((acc,tot)=>{
-      return acc + tot.quantity
-    },0);
+    let totalItem = response.data.cartProduct.reduce((acc, tot) => {
+      return acc + tot.quantity;
+    }, 0);
 
     let price = response.data.cartProduct.reduce((acc, tot) => {
       return acc + tot.price * tot.quantity;
@@ -61,7 +60,33 @@ const OrderSummary = () => {
     showBuyProduct();
   }, []);
 
-  console.log("address", buyProduct);
+  const handleOrder = async () => {
+    const data = {
+      totalPrice: subTotalPrice.toFixed(0),
+      totalDiscountedPrice: totalPrice.toFixed(0),
+      discount: (subTotalPrice - totalPrice).toFixed(0),
+      totalItem: totalItem,
+      buyProduct:buyProduct
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/order/createOrder",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("response----------", response);
+      navigate(`/checkout/${response.data.order._id}`, { state: { data: totalPrice.toFixed(0) } });
+      // navigate("/checkout?step=4", { state: { data: totalPrice.toFixed(0) } });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // console.log("address", buyProduct);
   return (
     <>
       <div className="flex flex-col space-y-8">
@@ -113,7 +138,9 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between pt-3">
                   <span>Disccount</span>
-                  <span className="text-green-700">-₹{subTotalPrice-totalPrice?.toFixed(0)}</span>
+                  <span className="text-green-700">
+                    -₹{subTotalPrice - totalPrice?.toFixed(0)}
+                  </span>
                 </div>
 
                 <div className="flex justify-between pt-3">
@@ -122,10 +149,15 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between pt-3 font-bold">
                   <span>Total Amount</span>
-                  <span className="text-green-700">₹{totalPrice?.toFixed(0)}</span>
+                  <span className="text-green-700">
+                    ₹{totalPrice?.toFixed(0)}
+                  </span>
                 </div>
               </div>
-              <button className="bg-violet-500 text-white w-full p-2 rounded-md" onClick={handleDelivery}>
+              <button
+                className="bg-violet-500 text-white w-full p-2 rounded-md"
+                onClick={handleOrder}
+              >
                 Payment
               </button>
             </div>

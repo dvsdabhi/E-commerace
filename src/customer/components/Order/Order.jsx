@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import OrderCard from "./OrderCard";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Order = () => {
+  const [orderItem, setOrderItem] = useState();
   const orderStatus = [
     { lable: "On The Way", value: "on_the_way" },
     { lable: "Delivered", value: "delivered" },
@@ -9,6 +12,27 @@ const Order = () => {
     { lable: "Returned", value: "returned" },
   ];
 
+  const token = localStorage.getItem("authToken");
+
+  const handleOrder = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/order/getOrder",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setOrderItem(response.data.order);
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    handleOrder();
+  }, []);
 
   return (
     <>
@@ -35,7 +59,13 @@ const Order = () => {
           </div>
         </div>
         <div className="lg:col-span-2 space-y-5">
-          {[1,1,1,1,1,1].map((item)=><OrderCard />)}
+          {orderItem?.map((item) =>
+            item.buyProduct.map((el) => (
+              <Link to={`/account/order/${item._id}/${el._id}`} key={el._id}>
+                <OrderCard item={el} />
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </>

@@ -15,11 +15,8 @@ import { filters, singleFilter } from "./FilterData";
 import { IoFilterSharp } from "react-icons/io5";
 // import { URLSearchParams } from "url";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const sortOptions = [
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
-];
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -27,7 +24,8 @@ function classNames(...classes) {
 
 export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [allProductData,setAllProductData] = useState([]);
+  const [allProductData, setAllProductData] = useState([]);
+  const [filterPercentage, setFilterPercentage] = useState([]);
   // const [searchParamms,setSearchParamms] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,7 +38,7 @@ export default function Product() {
     // console.log("value----->>>>>>>",value);
     // console.log("sectionID----->>>>>>>",sectionID);
     const searchParamms = new URLSearchParams(location.search);
-    // console.log("searchParamms--->>>", searchParamms.get("color"));
+    console.log("searchParamms--->>>", searchParamms.get("color"));
     let filterValue = searchParamms.getAll(sectionID);
     // console.log("filterValue", filterValue);
     // console.log("split values++++",filterValue.split(","))
@@ -64,24 +62,82 @@ export default function Product() {
     navigate({ search: `?${query}` });
   };
 
-  const handleRadioFilterChange = (e, sectionID) => {
-    const searchParamms = new URLSearchParams(location.search);
-    searchParamms.set(sectionID, e.target.value);
-    const query = searchParamms.toString();
-    navigate({ search: `${query}` });
+  const handleRadioFilterChange = async (e, sectionID) => {
+    if (sectionID === "price") {
+      const searchParamms = new URLSearchParams(location.search);
+      searchParamms.set(sectionID, e.target.value);
+      const query = searchParamms.toString();
+      const price = query.split("=")[1];
+      // console.log("sectionID", price[1]);
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/search/price/${price}`
+        );
+        setAllProductData(response.data.filterPriceRange);
+      } catch (error) {
+        toast.error("not found discount");
+      }
+      navigate({ search: `${query}` });
+    }
+
+    if (sectionID === "discount") {
+      const searchParamms = new URLSearchParams(location.search);
+      searchParamms.set(sectionID, e.target.value);
+      const query = searchParamms.toString();
+      const discount = parseInt(query.split("=")[1], 10);
+      console.log("sectionID", discount);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/search/percentage/${discount}`
+        );
+        setAllProductData(response.data.filterPercentage);
+      } catch (error) {
+        toast.error("not found discount");
+      }
+      navigate({ search: `${query}` });
+    }
   };
 
-  const get_All_Product = async()=> {
+  const get_All_Product = async () => {
     const res = await getAllProduct();
     // console.log("response-------->>>>>>>>>>",res.data.product);
     setAllProductData(res.data.product);
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     get_All_Product();
-  },[]);
-  
-  // console.log("allProductData=--=-=-=-=-=-=-=-",allProductData[1].title);
+  }, []);
+
+  const handleSort = (sortType) => {
+    if (sortType === "lowToHigh") {
+      const sortArray = [...allProductData].sort(
+        (item1, item2) => item1.discountedPrice - item2.discountedPrice
+      );
+      setAllProductData(sortArray);
+    }
+    if (sortType === "highToLow") {
+      const sortArray = [...allProductData].sort(
+        (item1, item2) => item2.discountedPrice - item1.discountedPrice
+      );
+      setAllProductData(sortArray);
+    }
+  };
+
+  const sortOptions = [
+    {
+      name: "Price: Low to High",
+      current: false,
+      clickHandler: () => handleSort("lowToHigh"),
+    },
+    {
+      name: "Price: High to Low",
+      current: false,
+      clickHandler: () => handleSort("highToLow"),
+    },
+  ];
+
+  // console.log("allProductData=--=-=-=-=-=-=-=-", allProductData);
 
   return (
     <div className="bg-white">
@@ -224,22 +280,25 @@ export default function Product() {
                   leaveTo="transform opacity-0 scale-95"
                 >
                   <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
+                    <div className="py-1 cursor-pointer">
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
-                              className={classNames(
-                                option.current
-                                  ? "font-medium text-gray-900"
-                                  : "text-gray-500",
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm"
-                              )}
-                            >
-                              {option.name}
-                            </a>
+                            <>
+                              {/* <p>{option.sort}</p> */}
+                              <a
+                                onClick={option.clickHandler}
+                                className={classNames(
+                                  option.current
+                                    ? "font-medium text-gray-900"
+                                    : "text-gray-500",
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm"
+                                )}
+                              >
+                                {option.name}
+                              </a>
+                            </>
                           )}
                         </Menu.Item>
                       ))}
@@ -407,8 +466,8 @@ export default function Product() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-5">
-                  {allProductData.map((item) => (
-                    <ProdactCard product={item} />
+                  {allProductData.map((item, index) => (
+                    <ProdactCard key={index} product={item} />
                   ))}
                 </div>
               </div>

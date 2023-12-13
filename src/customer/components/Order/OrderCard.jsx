@@ -1,28 +1,24 @@
 import React from "react";
 import { MdOutlineAdjust } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 
-const OrderCard = () => {
-
-  const navigate = useNavigate();
-
+const OrderCard = ({ item }) => {
   return (
     <>
-      <div onClick={()=>navigate(`/account/order/${5}`)} className="grid grid-cols-3 shadow-custom hover:shadow-xl p-3">
+      <div className="grid grid-cols-3 shadow-custom hover:shadow-xl p-3">
         <div className="flex space-x-4 cursor-pointer">
           <img
-            src="https://rukminim1.flixcart.com/image/612/612/xif0q/kurta/z/l/b/xl-grey-sws2902-allan-peter-original-imag3y6tzaaxwkhy-bb.jpeg?q=70"
+            src={item.product.imageUrl}
             alt=""
             className="h-[5rem] w-[5rem] object-cover object-top"
           />
           <div className="">
-            <p>Men Printed Pure Cotton Straight Kurta</p>
+            <p>{item.product.title}</p>
             <p className="opacity-50 text-xs font-semibold">Size : M</p>
-            <p className="opacity-50 text-xs font-semibold">Size : Black</p>
+            <p className="opacity-50 text-xs font-semibold">Color : Black</p>
           </div>
         </div>
         <div className="flex justify-center">
-          <p>₹1099</p>
+          <p>₹{item.product.discountedPrice.toFixed(0)}</p>
         </div>
         <div>
           {true && (

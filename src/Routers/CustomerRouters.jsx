@@ -13,6 +13,9 @@ import OrderDetails from "../customer/components/Order/OrderDetails";
 import Navigation1 from "../customer/components/Navigation/Navigation1";
 import Footer from "../customer/components/Footer/Footer";
 import OrderSummary from "../customer/components/Checkout/OrderSummary";
+import Payment from "../customer/components/Checkout/Payment";
+import Success from "../customer/components/Checkout/Success";
+import ViewProfile from "../customer/components/Profile/ViewProfile";
 const Allrouter = () => {
   return (
     <>
@@ -30,8 +33,11 @@ const Allrouter = () => {
           {/* <Route path="/women" element={<WomenAssessories />} /> */}
           <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout/:orderId" element={<Payment />} />
+          <Route path="/payment/:orderId" element={<Success />} />
           <Route path="/account/order" element={<Order />} />
-          <Route path="/account/order/:orderId" element={<OrderDetails />} />
+          <Route path="/user/profile" element={<ViewProfile />} />
+          <Route path="/account/order/:orderId1/:orderId2" element={<OrderDetails />} />
           <Route path="/ordersummary" element={<OrderSummary />} />
         </Routes>
       </div>

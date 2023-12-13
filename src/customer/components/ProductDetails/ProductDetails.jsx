@@ -215,7 +215,7 @@ const ProductDetails = () => {
                 </h1>
                 <p className="text-lg text-gray-900 opacity-60 pt-1">{singleProductData.brand}</p>
                 <div className="flex space-x-5 items-center text-lg text-gray-900 mt-6">
-                  <p className="font-semibold">₹{singleProductData.discountedPrice}</p>
+                  <p className="font-semibold">₹{singleProductData.discountedPrice.toFixed(0)}</p>
                   <p className="opacity-50 line-through">₹{singleProductData.price}</p>
                   <p className="text-green-600 font-semibold">{singleProductData.discountPersent}% Off</p>
                 </div>

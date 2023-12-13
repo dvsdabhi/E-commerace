@@ -12,6 +12,11 @@ const UserProfile = ({ setUserProfile }) => {
     setUserProfile(false);
   };
 
+  const handleProfile = () => {
+    navigate("/user/profile");
+    setUserProfile(false);
+  };
+
   const handleLogOut = async () => {
     localStorage.removeItem("authToken");
     dispatch(checkAuth());
@@ -24,7 +29,7 @@ const UserProfile = ({ setUserProfile }) => {
       <div className="absolute z-50 right-72">
         <div className="shadow-custom w-fit p-3 space-y-2 bg-white">
           <div className="flex flex-col space-y-2">
-            <button className="hover:bg-gray-200">Profile</button>
+            <button className="hover:bg-gray-200" onClick={handleProfile}>Profile</button>
             <button onClick={handleOrder} className="hover:bg-gray-200">
               My Orders
             </button>
