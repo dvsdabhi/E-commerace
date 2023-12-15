@@ -9,7 +9,7 @@ function App() {
       <div className="flex flex-col justify-between h-full">
         <Routes>
           <Route path="/*" element={<CustomerRouters />} />
-          <Route path="/admin*" element={<AdminRouter />} />
+          <Route path="/admin/*" element={<AdminRouter />} />
         </Routes>
       </div>
     </>

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { checkAuth } from "../../../redux/features/Auth";
 import { toast } from "react-toastify";
 import { signIn } from "../../utils/queries";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = ({ setSignup, setSignin }) => {
   const [signInData, setSignInData] = useState({
@@ -11,6 +12,7 @@ const SignIn = ({ setSignup, setSignin }) => {
     password: "",
   });
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -24,13 +26,23 @@ const SignIn = ({ setSignup, setSignin }) => {
       const res = await signIn(signInData);
       console.log(res);
       if (res.data.status === 200) {
-        localStorage.setItem("authToken", res.data.token);
-        dispatch(checkAuth());
-        toast.success("login success");
-        setTimeout(() => {
-          setSignin(false);
-        }, 1000);
-        console.log(res.data);
+        if (res.data.role === "admin") {
+          localStorage.setItem("authToken", res.data.token);
+          // dispatch(checkAuth());
+          toast.success("login success");
+          setTimeout(() => {
+            setSignin(false);
+          }, 1000);
+          navigate("/admin");
+        } else {
+          localStorage.setItem("authToken", res.data.token);
+          dispatch(checkAuth());
+          toast.success("login success");
+          setTimeout(() => {
+            setSignin(false);
+          }, 1000);
+          console.log(res.data);
+        }
       }
     } catch (error) {
       toast.error(error.response.data.message);
