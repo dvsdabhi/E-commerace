@@ -30,14 +30,16 @@ const Allrouter = () => {
             path="/:lavelOne/:lavelTwo/:lavelThree"
             element={<Product />}
           />
-          {/* <Route path="/women" element={<WomenAssessories />} /> */}
           <Route path="/product/:productId" element={<ProductDetails />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/:orderId" element={<Payment />} />
           <Route path="/payment/:orderId" element={<Success />} />
           <Route path="/account/order" element={<Order />} />
           <Route path="/user/profile" element={<ViewProfile />} />
-          <Route path="/account/order/:orderId1/:orderId2" element={<OrderDetails />} />
+          <Route
+            path="/account/order/:orderId1/:orderId2"
+            element={<OrderDetails />}
+          />
           <Route path="/ordersummary" element={<OrderSummary />} />
         </Routes>
       </div>

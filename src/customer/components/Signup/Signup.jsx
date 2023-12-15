@@ -31,14 +31,17 @@ const Signup = ({ signup, setSignup, setSignin }) => {
         console.log(res.data);
         if (res.data.status === 200) {
           localStorage.setItem("authToken", res.data.token);
-          const token = localStorage.getItem("authToken");
-          if (token != null) {
-            dispatch(checkAuth(true));
-            toast.success("register success");
-            setTimeout(() => {
-              setSignup(false);
-            }, 1000);
-          }
+          setSignup(false);
+          setSignin(true);
+          toast.success("register success");
+          // const token = localStorage.getItem("authToken");
+          // if (token != null) {
+          //   dispatch(checkAuth(true));
+          //   toast.success("register success");
+          //   setTimeout(() => {
+          //     setSignup(false);
+          //   }, 1000);
+          // }
         }
       } catch (error) {
         toast.error(error.response.data.message);

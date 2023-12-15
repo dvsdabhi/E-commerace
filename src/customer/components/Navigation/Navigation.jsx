@@ -297,7 +297,7 @@ export default function Navigation() {
                 </div>
 
                 <div className="border-t border-gray-200 px-4 py-6">
-                  <a href="#" className="-m-2 flex items-center p-2">
+                  <a  className="-m-2 flex items-center p-2">
                     <img
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
                       alt=""

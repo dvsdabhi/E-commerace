@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       screens:{
-        xsm:{max:"639px"}
+        xsm:{max:"639px"},
       },
       boxShadow: {
         'custom': '0 1px 5px rgba(0, 0, 0, 0.3)',

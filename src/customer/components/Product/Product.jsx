@@ -9,7 +9,7 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import ProdactCard from "./ProdactCard";
-import { mens_kurta } from "../../../Data/mens_kurta";
+// import { mens_kurta } from "../../../Data/mens_kurta";
 import { getAllProduct } from "../../utils/queries.js";
 import { filters, singleFilter } from "./FilterData";
 import { IoFilterSharp } from "react-icons/io5";
@@ -25,7 +25,6 @@ function classNames(...classes) {
 export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [allProductData, setAllProductData] = useState([]);
-  const [filterPercentage, setFilterPercentage] = useState([]);
   // const [searchParamms,setSearchParamms] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
@@ -67,11 +66,20 @@ export default function Product() {
       const searchParamms = new URLSearchParams(location.search);
       searchParamms.set(sectionID, e.target.value);
       const query = searchParamms.toString();
-      const price = query.split("=")[1];
-      // console.log("sectionID", price[1]);
+      // console.log("query-------price---->>>", query);
+      const price = query.split("&");
+      // console.log("price-------price---->>>", price);
+      let price_range;
+      for (let item of price) {
+        if (item.includes("price=")) {
+          price_range = item.split("=")[1];
+        }
+      }
+
+      // console.log("price_range", price_range);
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/search/price/${price}`
+          `http://localhost:8080/api/search/price/${price_range}`
         );
         setAllProductData(response.data.filterPriceRange);
       } catch (error) {
@@ -84,12 +92,20 @@ export default function Product() {
       const searchParamms = new URLSearchParams(location.search);
       searchParamms.set(sectionID, e.target.value);
       const query = searchParamms.toString();
-      const discount = parseInt(query.split("=")[1], 10);
-      console.log("sectionID", discount);
+      console.log("query-------discount---->>>", query);
+      const discount = query.split("&");
+      console.log("discount-------discount---->>>", discount);
+      let dis_value;
+      for (let item of discount) {
+        if (item.includes("discount=")) {
+          dis_value = item.split("=")[1];
+        }
+      }
+      console.log("dis_value", dis_value);
 
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/search/percentage/${discount}`
+          `http://localhost:8080/api/search/percentage/${dis_value}`
         );
         setAllProductData(response.data.filterPercentage);
       } catch (error) {
@@ -286,7 +302,7 @@ export default function Product() {
                           {({ active }) => (
                             <>
                               {/* <p>{option.sort}</p> */}
-                              <a
+                              <a href="#"
                                 onClick={option.clickHandler}
                                 className={classNames(
                                   option.current

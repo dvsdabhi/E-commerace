@@ -10,10 +10,14 @@ export const signUp = async (signUpData) => {
 };
 
 // signIn api call
-export const signIn = async (signInData) => {
+export const signIn = async (signInData,token) => {
   const response = await axios.post(
     `http://localhost:8080/api/auth/signin`,
-    signInData
+    signInData,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
   return response;
 };

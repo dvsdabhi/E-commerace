@@ -1,6 +1,6 @@
 import React from "react";
 import { navigation } from "../../../Data/NavbarData";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const WomenAssessories = ({
   setWomenAccessories,
@@ -22,7 +22,9 @@ const WomenAssessories = ({
   return (
     <>
       <div
-        className="flex justify-between w-full bg-white py-16 px-24 absolute z-50 mt-0 sm:hidden xsm:hidden md:flex xl:flex 2xl:flex shadow-2xl"
+        className={`transition-transform transform ${
+          womenAccessoriesData ? "max-h-screen" : "max-h-none"
+        } flex justify-between w-full bg-white py-16 px-24 absolute z-50 mt-0 sm:hidden xsm:hidden md:flex xl:flex 2xl:flex shadow-2xl`}
         onMouseLeave={() => {
           handleMouseLeave();
           setID("");

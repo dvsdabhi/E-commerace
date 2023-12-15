@@ -22,6 +22,7 @@ const SignIn = ({ setSignup, setSignin }) => {
     e.preventDefault();
     try {
       const res = await signIn(signInData);
+      console.log(res);
       if (res.data.status === 200) {
         localStorage.setItem("authToken", res.data.token);
         dispatch(checkAuth());
