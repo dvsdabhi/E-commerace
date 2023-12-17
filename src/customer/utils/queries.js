@@ -26,7 +26,7 @@ export const signIn = async (signInData,token) => {
 
 export const getAllProduct = async () => {
   const response = await axios.get(
-    "http://localhost:8080/api/admin/get/product"
+    "http://localhost:8080/api/admin/product"
   );
   return response;
 };

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { add_product } from "../utils/api";
 
 const Addproduct = () => {
@@ -53,6 +54,7 @@ const Addproduct = () => {
     try {
       const res = await add_product(product);
       console.log("res---------->>>>>>", res);
+      toast.success("product added successfully");
       setProduct({
         title: "",
         description: "",
