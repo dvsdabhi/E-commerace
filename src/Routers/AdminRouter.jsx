@@ -7,6 +7,7 @@ import Product from "../admin/components/Product";
 import Customer from "../admin/components/Customer";
 import Order from "../admin/components/Order";
 import Header from "../admin/components/Header";
+import UpdateProduct from "../admin/components/UpdateProduct";
 
 const AdminRouter = () => {
   return (
@@ -25,6 +26,7 @@ const AdminRouter = () => {
             <Route path="/customer" element={<Customer />} />
             <Route path="/order" element={<Order />} />
             <Route path="/addproduct" element={<Addproduct />} />
+            <Route path="/product/update/:id" element={<UpdateProduct />} />
           </Routes>
         </div>
       </div>
