@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 
-const OrderStatusModal = ({ order_id, isModalOpen, setIsModalOpen,viewOrders }) => {
+const OrderStatusModal = ({ order_id, isModalOpen, setIsModalOpen, viewOrders }) => {
   // const [status, setStatus] = useState("");
   const changeStatus = async (e) => {
     const buttonText = e.target.textContent;

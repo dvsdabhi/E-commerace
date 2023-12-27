@@ -1,15 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UpdateProduct = () => {
-  const [sizes, setSizes] = useState([
-    { name: "S", quantity: "" },
-    { name: "M", quantity: "" },
-    { name: "L", quantity: "" },
-  ]);
-
-  const [singleProduct, setSingleProduct] = useState([]);
   const [product, setProduct] = useState({
     title: "",
     description: "",
@@ -19,14 +13,13 @@ const UpdateProduct = () => {
     brand: "",
     color: "",
     quantity: "",
-    sizes: sizes,
+    size: "",
     imageUrl: "",
     category: "",
     childCategory: "",
     subChildCategory: "",
   });
-  const [updateProduct, setUpdateProduct] = useState([]);
-  const [isEditMode, setIsEditMode] = useState(false); 
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const params = useParams();
   console.log(params.id);
@@ -36,9 +29,8 @@ const UpdateProduct = () => {
       const response = await axios.get(
         `http://localhost:8080/api/admin/get/single/product/${params.id}`
       );
-      setSingleProduct(response.data.singleProduct);
+      setProduct(response.data.singleProduct);
       setIsEditMode(true);
-      //   console.log(response.data.singleProduct);
     } catch (error) {
       console.log(error.message);
     }
@@ -48,18 +40,42 @@ const UpdateProduct = () => {
     handleUpdateProduct();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
 
-    // If in edit mode, update the updateProduct state
-    if (isEditMode) {
-        setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
-    } else {
-      // If not in edit mode, update the singleProduct state
-      setSingleProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
+  const handleChange = (e) => {
+    const { name, type } = e.target;
+    if (type === "file") {
+      const files = Array.from(e.target.files);
+      const imageUrls = [];
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          imageUrls.push(reader.result);
+          setProduct((prevProduct) => ({ ...prevProduct, [name]: imageUrls }));
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    else {
+      const { value } = e.target;
+      setProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Perform your API call to update the product
+      const response = await axios.put(
+        `http://localhost:8080/api/admin/product/update/${params.id}`,
+        product
+      );
+      toast.success("Product details updated successfully");
+
+      console.log(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <>
@@ -71,15 +87,16 @@ const UpdateProduct = () => {
           <div className="">
             <form
               action=""
-              //   onSubmit={handleSubmit}
+              onSubmit={handleSubmit}
               className="flex flex-col space-y-5"
             >
               <div>
                 <input
                   type="file"
                   name="imageUrl"
-                  //   value={product.imageUrl}
-                  //   onChange={handleChange}
+                  multiple
+                  accept="image/*"
+                  onChange={handleChange}
                   className="border w-full p-4 rounded-lg"
                 />
               </div>
@@ -87,7 +104,7 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="brand"
-                  value={isEditMode ? singleProduct.brand || "" : ""}
+                  value={isEditMode ? product.brand || "" : ""}
                   onChange={handleChange}
                   placeholder="Brand"
                   className="p-4 rounded-lg border w-full"
@@ -95,7 +112,7 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="title"
-                  value={singleProduct.title}
+                  value={product.title}
                   onChange={handleChange}
                   placeholder="Title"
                   className="p-4 rounded-lg border w-full"
@@ -105,7 +122,7 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="color"
-                  value={singleProduct.color}
+                  value={product.color}
                   onChange={handleChange}
                   placeholder="Color"
                   className="p-4 rounded-lg border w-full"
@@ -113,7 +130,7 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="quantity"
-                  value={singleProduct.quantity}
+                  value={product.quantity}
                   onChange={handleChange}
                   placeholder="Quantity"
                   className="p-4 rounded-lg border w-full"
@@ -123,7 +140,7 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="price"
-                  value={singleProduct.price}
+                  value={product.price}
                   onChange={handleChange}
                   placeholder="Price"
                   className="p-4 rounded-lg border w-full"
@@ -131,7 +148,7 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="discountedPrice"
-                  value={singleProduct.discountedPrice}
+                  value={product.discountedPrice}
                   onChange={handleChange}
                   placeholder="Discounted Price"
                   className="p-4 rounded-lg border w-full"
@@ -139,54 +156,59 @@ const UpdateProduct = () => {
                 <input
                   type="text"
                   name="discountPersent"
-                  value={singleProduct.discountPersent}
+                  value={product.discountPersent}
                   onChange={handleChange}
                   placeholder="Discount Percentage"
                   className="p-4 rounded-lg border w-full"
                 />
               </div>
+              <div
+                className="w-full">
+                <select name="size" id="" value={product.size} onChange={handleChange} className="p-4 border rounded-lg w-full bg-white" >
+                  <option value="select size">select size</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="2XL">2XL</option>
+                </select>
+              </div>
               <div className="flex space-x-5 xsm:flex-wrap xsm:space-x-0 xsm:space-y-5">
                 <select
                   name="category"
-                  value={singleProduct.category}
+                  value={product.category}
                   onChange={handleChange}
                   id=""
                   className="p-4 border rounded-lg w-full bg-white"
+                  disabled
                 >
-                  <option value="">Top level category</option>
-                  <option value="Men">Men</option>
-                  <option value="Women">Women</option>
-                  <option value="Kids">Kids</option>
+                  <option value={product.category}>{product.category}</option>
                 </select>
                 <select
                   name="childCategory"
-                  value={singleProduct.childCategory}
+                  value={product.childCategory}
                   onChange={handleChange}
                   id=""
                   className="p-4 border rounded-lg w-full bg-white"
+                  disabled
                 >
-                  <option value="">Second level category</option>
-                  <option value="Men">Men</option>
-                  <option value="Women">Women</option>
-                  <option value="Kids">Kids</option>
+                  <option value={product.childCategory}>{product.childCategory}</option>
                 </select>
                 <select
                   name="subChildCategory"
                   id=""
-                  value={singleProduct.subChildCategory}
+                  value={product.subChildCategory}
                   onChange={handleChange}
                   className="p-4 border rounded-lg w-full bg-white"
+                  disabled
                 >
-                  <option value="">Third level category</option>
-                  <option value="Men">Men</option>
-                  <option value="Women">Women</option>
-                  <option value="Kids">Kids</option>
+                  <option value={product.subChildCategory}>{product.subChildCategory}</option>
                 </select>
               </div>
               <div>
                 <textarea
                   name="description"
-                  value={singleProduct.description}
+                  value={product.description}
                   onChange={handleChange}
                   id=""
                   cols="30"
@@ -195,39 +217,6 @@ const UpdateProduct = () => {
                   placeholder="Description"
                 ></textarea>
               </div>
-              {sizes.map((size, index) => (
-                <div
-                  key={index}
-                  className="flex space-x-5 xsm:flex-wrap xsm:space-x-0 xsm:space-y-5"
-                >
-                  <div className="relative w-full">
-                    <label
-                      htmlFor=""
-                      className="absolute -mt-3 text-gray-400 mx-5 w-fit bg-white"
-                    >
-                      Size Name*
-                    </label>
-                    <input
-                      type="text"
-                      value={size.name}
-                      //   onChange={(e) =>
-                      //     handleInputChange(index, "name", e.target.value)
-                      //   }
-                      className="p-4 border w-full rounded-lg"
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Quantity"
-                    value={size.quantity}
-                    // onChange={(e) =>
-                    //   handleInputChange(index, "quantity", e.target.value)
-                    // }
-                    className="p-4 border w-full rounded-lg"
-                  />
-                </div>
-              ))}
-
               <div>
                 <button
                   type="submit"

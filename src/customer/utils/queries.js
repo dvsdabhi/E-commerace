@@ -31,6 +31,16 @@ export const getAllProduct = async () => {
   return response;
 };
 
+// get filter product api.
+
+export const getFilterProduct = async (lavelOne,lavelThree) => {
+  console.log(lavelOne,lavelThree);
+  const response = await axios.get(
+    `http://localhost:8080/api/admin/product/${lavelOne}/${lavelThree}`
+  );
+  return response;
+};
+
 // get Single product api.
 const token = localStorage.getItem("authToken");
 export const getSingleProduct = async (productID) => {

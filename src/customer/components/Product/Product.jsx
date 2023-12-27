@@ -10,13 +10,17 @@ import {
 } from "@heroicons/react/20/solid";
 import ProdactCard from "./ProdactCard";
 // import { mens_kurta } from "../../../Data/mens_kurta";
-import { getAllProduct } from "../../utils/queries.js";
+import { getAllProduct, getFilterProduct } from "../../utils/queries.js";
 import { filters, singleFilter } from "./FilterData";
 import { IoFilterSharp } from "react-icons/io5";
 // import { URLSearchParams } from "url";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Circles, MutatingDots, TailSpin } from "react-loader-spinner";
+import { RingLoader } from "react-spinners";
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -26,8 +30,15 @@ export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [allProductData, setAllProductData] = useState([]);
   // const [searchParamms,setSearchParamms] = useState("");
+  const [ProductLoading, setProductLoading] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+
+  const params = useParams()
+  console.log(params.lavelOne, params.lavelThree, "000");
+  const [lavelOneValue, setlavelOneValue] = useState("");
+  const [lavelThree, setlavelThree] = useState("");
+
 
   // useEffect(()=>{
   //   setSearchParamms(new URLSearchParams(location.search));
@@ -78,10 +89,12 @@ export default function Product() {
 
       // console.log("price_range", price_range);
       try {
+        setProductLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/api/search/price/${price_range}`
+          `http://localhost:8080/api/search/price/${params.lavelOne}/${params.lavelThree}/${price_range}`
         );
         setAllProductData(response.data.filterPriceRange);
+        setProductLoading(false);
       } catch (error) {
         toast.error("not found discount");
       }
@@ -104,10 +117,12 @@ export default function Product() {
       console.log("dis_value", dis_value);
 
       try {
+        setProductLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/api/search/percentage/${dis_value}`
+          `http://localhost:8080/api/search/percentage/${params.lavelOne}/${params.lavelThree}/${dis_value}`
         );
         setAllProductData(response.data.filterPercentage);
+        setProductLoading(false);
       } catch (error) {
         toast.error("not found discount");
       }
@@ -116,14 +131,34 @@ export default function Product() {
   };
 
   const get_All_Product = async () => {
-    const res = await getAllProduct();
-    // console.log("response-------->>>>>>>>>>",res.data.product);
-    setAllProductData(res.data.product);
+    try {
+      setProductLoading(true);
+      const res = await getAllProduct();
+      // console.log("response-------->>>>>>>>>>", res.data.product);
+      setAllProductData(res.data.product);
+      setProductLoading(false);
+    } catch (error) {
+      toast.error("no product found");
+    }
   };
 
+  const categoryWiseProduct = async () => {
+    try {
+      setProductLoading(true);
+      const res = await getFilterProduct(params.lavelOne, params.lavelThree);
+      setAllProductData(res.data.product);
+      setProductLoading(false);
+      // console.log("response------", res);
+    } catch (error) {
+      toast("no product found")
+    }
+  }
+
   useEffect(() => {
-    get_All_Product();
-  }, []);
+    // get_All_Product();
+    // if(params)
+    categoryWiseProduct();
+  }, [params.lavelOne, params.lavelThree]);
 
   const handleSort = (sortType) => {
     if (sortType === "lowToHigh") {
@@ -153,7 +188,7 @@ export default function Product() {
     },
   ];
 
-  // console.log("allProductData=--=-=-=-=-=-=-=-", allProductData);
+  console.log("allProductData=--=-=-=-=-=-=-=-", allProductData);
 
   return (
     <div className="bg-white">
@@ -470,6 +505,10 @@ export default function Product() {
                                   </label>
                                 </div>
                               ))}
+                              <div className="flex space-x-5">
+                                <input type="radio" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" onClick={categoryWiseProduct} />
+                                <label htmlFor="">All</label>
+                              </div>
                             </div>
                           </Disclosure.Panel>
                         </>
@@ -479,14 +518,31 @@ export default function Product() {
                 </form>
               </div>
 
-              {/* Product grid */}
-              <div className="lg:col-span-4 w-full">
-                <div className="flex flex-wrap justify-center bg-white py-5">
-                  {allProductData.map((item, index) => (
-                    <ProdactCard key={index} product={item} />
-                  ))}
+              {ProductLoading ? (
+                <div className="lg:col-span-4 w-full  flex items-center justify-center">
+                  <RingLoader
+                    height="80"
+                    width="80"
+                    color="#808080"
+                    ariaLabel="tail-spin-loading"
+                    radius="1"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                  />
                 </div>
-              </div>
+              ) : (
+                <>
+                  {/* Product grid */}
+                  <div className="lg:col-span-4 w-full">
+                    <div className="flex flex-wrap justify-center bg-white py-5">
+                      {allProductData.map((item, index) => (
+                        <ProdactCard key={index} product={item} />
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </section>
         </main>
