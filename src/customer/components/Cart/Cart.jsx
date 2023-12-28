@@ -56,7 +56,9 @@ const Cart = () => {
 
   useEffect(() => {
     get_cart_product();
-  }, [cartProduct]);
+  }, [quantity]);
+
+  console.log('cart------', cartProduct);
 
   return (
     <>

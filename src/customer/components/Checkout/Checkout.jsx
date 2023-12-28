@@ -19,7 +19,7 @@ export default function Checkout() {
   const querySearch = new URLSearchParams(location.search);
   const step = querySearch.get("step");
 
- 
+
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -31,19 +31,21 @@ export default function Checkout() {
 
   return (
     <>
-      <div className="px-10 lg:px-20">
+      <div className="px-10 lg:px-20 xsm:px-0">
         <Box sx={{ width: "100%" }}>
-          <Stepper activeStep={step}>
-            {steps.map((label, index) => {
-              const stepProps = {};
-              const labelProps = {};
-              return (
-                <Step key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
-                </Step>
-              );
-            })}
-          </Stepper>
+          <div className="my-5 xsm:hidden">
+            <Stepper activeStep={step}>
+              {steps.map((label, index) => {
+                const stepProps = {};
+                const labelProps = {};
+                return (
+                  <Step key={label} {...stepProps}>
+                    <StepLabel {...labelProps}>{label}</StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </div>
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography sx={{ mt: 2, mb: 1 }}>
@@ -52,7 +54,7 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -61,7 +63,7 @@ export default function Checkout() {
                 >
                   Back
                 </Button>
-              </Box>
+              </Box> */}
 
               <div className="">
                 {step == 2 && <DeliveryAddressForm />}

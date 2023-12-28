@@ -66,7 +66,7 @@ const OrderSummary = () => {
       totalDiscountedPrice: totalPrice.toFixed(0),
       discount: (subTotalPrice - totalPrice).toFixed(0),
       totalItem: totalItem,
-      buyProduct:buyProduct
+      buyProduct: buyProduct
     };
     try {
       const response = await axios.post(
@@ -89,7 +89,7 @@ const OrderSummary = () => {
   // console.log("address", buyProduct);
   return (
     <>
-      <div className="flex flex-col space-y-8">
+      <div className="flex flex-col space-y-8 my-5">
         <div className="p-5 shadow-lg rounded-s-md border">
           {/* <AddressCard address={address}/> */}
           <p className="font-semibold">
@@ -111,7 +111,7 @@ const OrderSummary = () => {
                   <div className="h-[5rem] w-[5rem] lg:h-[9rem] lg:w-[9rem]">
                     <img
                       className="object-cover object-top w-full h-full"
-                      src={item.product?.imageUrl}
+                      src={item.product?.imageUrl[0]}
                       alt=""
                     />
                   </div>

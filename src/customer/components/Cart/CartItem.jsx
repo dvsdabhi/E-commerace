@@ -25,7 +25,7 @@ const CartItem = ({
           <div className="h-[5rem] w-[5rem] lg:h-[9rem] lg:w-[9rem]">
             <img
               className="object-cover object-top w-full h-full"
-              src={cartProduct.product.imageUrl}
+              src={cartProduct.product.imageUrl[0]}
               alt=""
             />
           </div>
@@ -37,13 +37,13 @@ const CartItem = ({
 
             <div className="flex space-x-5 items-center text-gray-900 pt-6">
               <p className="line-through opacity-50">
-                ₹{cartProduct.product.price}
+                ₹{cartProduct.product?.price}
               </p>
               <p className="font-semibold">
-                ₹{cartProduct.product.discountedPrice.toFixed(0)}
+                ₹{cartProduct.product?.discountedPrice.toFixed(0)}
               </p>
               <p className="text-green-700 font-semibold">
-                {cartProduct.product.discountPersent} % off
+                {cartProduct.product?.discountPersent} % off
               </p>
             </div>
           </div>
