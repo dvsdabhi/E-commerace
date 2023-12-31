@@ -5,7 +5,7 @@ import ProductReviewCard from "./ProductReviewCard";
 import { mens_kurta } from "../../../Data/mens_kurta";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSingleProduct } from "../../utils/queries";
+import { addProductRating, getSingleProduct } from "../../utils/queries";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { RingLoader } from "react-spinners";
@@ -44,11 +44,11 @@ const ProductDetails = () => {
       { name: "Black", class: "bg-gray-900", selectedClass: "ring-gray-900" },
     ],
     sizes: [
-      { name: "XS", inStock: true },
       { name: "S", inStock: true },
       { name: "M", inStock: true },
       { name: "L", inStock: true },
       { name: "XL", inStock: true },
+      { name: "2XL", inStock: true },
     ],
     description:
       'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
@@ -172,6 +172,7 @@ const ProductDetails = () => {
         "http://localhost:8080/api/cart",
         {
           id: P_ID,
+          size: selectedOption
         },
         {
           headers: {
@@ -185,6 +186,24 @@ const ProductDetails = () => {
       toast.error(error.response.data.message);
     }
   };
+
+  // console.log(selectedOption);
+
+  const AddRating = async () => {
+    try {
+      const res = await axios.post(`http://localhost:8080/api/rating/${P_ID}`,
+        { rating },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      toast.success("thank you for the rating");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
 
   return (
     <>
@@ -236,7 +255,7 @@ const ProductDetails = () => {
                     </div>
                     <div className="flex flex-col gap-2 mt-2">
                       <div className="flex items-center">
-                        {startArray.map((el, i) => (
+                        {/* {startArray.map((el, i) => (
                           <h1
                             key={el.id}
                             onClick={() => handleRatingClick(i + 1)}
@@ -247,7 +266,7 @@ const ProductDetails = () => {
                           >
                             {rating > i ? el.icon : el.icon1}
                           </h1>
-                        ))}
+                        ))} */}
                         <p className="opacity-50 text-sm ml-3">56540 Ratings</p>
                         <p className="text-sm font-medium ml-3 text-indigo-600 hover:text-indigo-500">
                           3870 Reviews
@@ -364,6 +383,46 @@ const ProductDetails = () => {
                             <span className="pl-5">{item.percentage}</span>
                           </div>
                         ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="flex flex-col space-y-5 p-5">
+                      <div className="">
+                        <h1 className="text-center font-semibold">Write A Product Review</h1>
+                      </div>
+                      <div>
+                        <form action="" className="flex flex-col space-y-3">
+                          <textarea name="" id="" cols="30" rows="10" className="border-2 border-gray-400 p-2 rounded-lg" placeholder="Enter your review here"></textarea>
+                          <button className="p-2 border-2 border-gray-400 rounded-lg">ADD Review</button>
+                        </form>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <div className="flex flex-col space-y-5">
+                        <div>
+                          <h1 className="text-center font-semibold">Write A Product Rating</h1>
+                        </div>
+                        <div className="flex flex-col space-y-5 py-5 border-2 border-gray-400 rounded-lg items-center">
+                          <div className="flex">
+                            {startArray.map((el, i) => (
+                              <h1
+                                key={el.id}
+                                onClick={() => handleRatingClick(i + 1)}
+                                className={`${rating > i
+                                  ? "text-yellow-500 text-4xl"
+                                  : "text-yellow-500 text-4xl"
+                                  }`}
+                              >
+                                {rating > i ? el.icon : el.icon1}
+                              </h1>
+                            ))}
+                          </div>
+                          <p>Rating: {rating}/5</p>
+                          <div>
+                            <button className="p-2 border-2 border-gray-400 rounded-lg" onClick={AddRating}>ADD Rating</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -32,7 +32,7 @@ const CartItem = ({
 
           <div className="ml-5 space-y-1">
             <p className="font-semibold">{cartProduct.product.title}</p>
-            <p className="opacity-70">Size : {cartProduct.size},White</p>
+            <p className="opacity-70">Size : {cartProduct.size}, {cartProduct.product.color}</p>
             <p className="opacity-70 mt-2">Seller : Mansi Fashion</p>
 
             <div className="flex space-x-5 items-center text-gray-900 pt-6">
