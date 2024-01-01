@@ -61,8 +61,19 @@ const ProductDetails = () => {
     details:
       'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
   };
-
+  // totalRatings
   const [rating, setRating] = useState(0);
+  const [sumRating, setSumRating] = useState(0);
+  const [totalRating, setTotalRating] = useState(0);
+  const [starPercentage, setStarPercentage] = useState({
+    OneStar: 0,
+    TwoStar: 0,
+    ThreeStar: 0,
+    FourStar: 0,
+    FiveStar: 0,
+  });
+  const [addReview, setAddReview] = useState("");
+  const [totalReview, setTotalReview] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const [singleProductData, setSingleProductData] = useState();
   const [ProductLoading, setProductLoading] = useState("");
@@ -126,27 +137,27 @@ const ProductDetails = () => {
   const Ratingpercentage = [
     {
       name: "Excellent",
-      percentage: "80%",
+      percentage: "FiveStar",
       color: "bg-green-600",
     },
     {
       name: "Very Good",
-      percentage: "55%",
+      percentage: "FourStar",
       color: "bg-cyan-400",
     },
     {
       name: "Good",
-      percentage: "45%",
+      percentage: "ThreeStar",
       color: "bg-yellow-400",
     },
     {
       name: "Avarage",
-      percentage: "35%",
+      percentage: "TwoStar",
       color: "bg-orange-600",
     },
     {
       name: "Poor",
-      percentage: "15%",
+      percentage: "OneStar",
       color: "bg-red-600",
     },
   ];
@@ -189,6 +200,7 @@ const ProductDetails = () => {
 
   // console.log(selectedOption);
 
+  // add rating logic
   const AddRating = async () => {
     try {
       const res = await axios.post(`http://localhost:8080/api/rating/${P_ID}`,
@@ -200,6 +212,47 @@ const ProductDetails = () => {
         },
       );
       toast.success("thank you for the rating");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+
+  // getRating logic
+  const Get_Rating = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/api/totalRating/${P_ID}`);
+      setSumRating(res.data.overallRating);
+      setTotalRating(res.data.totalRatings);
+      setStarPercentage({
+        OneStar: res.data.OneStar,
+        TwoStar: res.data.TwoStar,
+        ThreeStar: res.data.ThreeStar,
+        FourStar: res.data.FourStar,
+        FiveStar: res.data.FiveStar,
+      })
+      console.log(res)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    Get_Rating();
+  }, []);
+
+  // Add review logic
+  const AddReview = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`http://localhost:8080/api/review/${P_ID}`,
+        addReview,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log(res.data);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -255,24 +308,20 @@ const ProductDetails = () => {
                     </div>
                     <div className="flex flex-col gap-2 mt-2">
                       <div className="flex items-center">
-                        {/* {startArray.map((el, i) => (
+                        {startArray.map((el, i) => (
                           <h1
                             key={el.id}
-                            onClick={() => handleRatingClick(i + 1)}
-                            className={`${rating > i
-                              ? "text-yellow-500 text-4xl"
-                              : "text-yellow-500 text-4xl"
-                              }`}
+                            className="text-yellow-500 text-4xl"
                           >
-                            {rating > i ? el.icon : el.icon1}
+                            {sumRating > i ? el.icon : el.icon1}
                           </h1>
-                        ))} */}
-                        <p className="opacity-50 text-sm ml-3">56540 Ratings</p>
+                        ))}
+                        <p className="opacity-50 text-sm ml-3">{totalRating} Ratings</p>
                         <p className="text-sm font-medium ml-3 text-indigo-600 hover:text-indigo-500">
                           3870 Reviews
                         </p>
                       </div>
-                      <p>Rating: {rating}/5</p>
+                      <p>Rating: {sumRating.toFixed(1)}/5</p>
                     </div>
                   </div>
 
@@ -357,14 +406,17 @@ const ProductDetails = () => {
                       <h1 className="font-semibold">Product Ratings</h1>
                       <div className="flex gap-2 items-center">
                         <div className="flex text-yellow-500">
-                          <AiFillStar />
-                          <AiFillStar />
-                          <AiFillStar />
-                          <AiFillStar />
-                          <AiFillStar />
+                          {startArray.map((el, i) => (
+                            <h1
+                              key={el.id}
+                              className="text-yellow-500 text-xl"
+                            >
+                              {sumRating > i ? el.icon : el.icon1}
+                            </h1>
+                          ))}
                         </div>
                         <div>
-                          <h1 className="opacity-70">54890 Ratings</h1>
+                          <h1 className="opacity-70">{totalRating} Ratings</h1>
                         </div>
                       </div>
                       <div className="flex flex-col gap-3 mt-8">
@@ -377,10 +429,10 @@ const ProductDetails = () => {
                             <div className="h-2 bg-gray-200 w-[60%] lg:w-[40%] rounded-full">
                               <div
                                 className={`h-2 ${item.color} rounded-full `}
-                                style={{ width: item.percentage }}
+                                style={{ width: starPercentage[item.percentage] }}
                               ></div>
                             </div>
-                            <span className="pl-5">{item.percentage}</span>
+                            <span className="pl-5">{`${(starPercentage[item.percentage]).toFixed(0)}%`}</span>
                           </div>
                         ))}
                       </div>
@@ -392,8 +444,8 @@ const ProductDetails = () => {
                         <h1 className="text-center font-semibold">Write A Product Review</h1>
                       </div>
                       <div>
-                        <form action="" className="flex flex-col space-y-3">
-                          <textarea name="" id="" cols="30" rows="10" className="border-2 border-gray-400 p-2 rounded-lg" placeholder="Enter your review here"></textarea>
+                        <form action="" className="flex flex-col space-y-3" onSubmit={AddReview}>
+                          <textarea name="" id="" cols="30" rows="5" onChange={(e) => setAddReview(e.target.value)} className="border-2 border-gray-400 p-2 rounded-lg" placeholder="Enter your review here"></textarea>
                           <button className="p-2 border-2 border-gray-400 rounded-lg">ADD Review</button>
                         </form>
                       </div>

@@ -61,17 +61,3 @@ export const removeCartProduct = async (id) => {
     console.log("delete error", error);
   }
 };
-
-// Add product rating
-// export const addProductRating = async(product_id,token,rating)=>{
-//   const res = await axios.post(`http://localhost:8080/api/rating/${product_id},`,
-//   {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   },
-//   rating,
-
-//   );
-//   return res;
-// }

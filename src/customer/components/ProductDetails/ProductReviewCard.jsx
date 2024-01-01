@@ -1,7 +1,12 @@
 import React from "react";
 import { AiFillStar } from "react-icons/ai";
-
+import { useParams } from "react-router-dom";
 const ProductReviewCard = () => {
+
+  // const params = useParams();
+  // console.log("useParams", params.productId);
+
+
   return (
     <>
       <div>
