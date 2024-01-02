@@ -4,7 +4,7 @@ import "./ProductDetails.css";
 import ProductReviewCard from "./ProductReviewCard";
 import { mens_kurta } from "../../../Data/mens_kurta";
 import HomeSectionCard from "../HomeSectionCard/HomeSectionCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { addProductRating, getSingleProduct } from "../../utils/queries";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -74,6 +74,7 @@ const ProductDetails = () => {
   });
   const [addReview, setAddReview] = useState("");
   const [totalReview, setTotalReview] = useState(0);
+  const [getReview, setReview] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
   const [singleProductData, setSingleProductData] = useState();
   const [ProductLoading, setProductLoading] = useState("");
@@ -230,7 +231,7 @@ const ProductDetails = () => {
         FourStar: res.data.FourStar,
         FiveStar: res.data.FiveStar,
       })
-      console.log(res)
+      // console.log(res)
     } catch (error) {
       console.log(error);
     }
@@ -243,20 +244,43 @@ const ProductDetails = () => {
   // Add review logic
   const AddReview = async (e) => {
     e.preventDefault();
+    // console.log("addReview------------------", addReview);
     try {
       const res = await axios.post(`http://localhost:8080/api/review/${P_ID}`,
-        addReview,
+        { addReview },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      console.log(res.data);
+      toast.success(res.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }
   }
+
+  const Get_Review = async () => {
+    try {
+      const res = await axios.get(`http://localhost:8080/api/totalReview/${P_ID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
+      setTotalReview(res.data.total_review);
+      setReview(res.data.reviews.reverse());
+      // setUserReviewRating(res.data.reviews.rating.rating);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    Get_Review();
+  }, []);
+
+  // console.log("getReview---", getReview);
 
   return (
     <>
@@ -273,7 +297,7 @@ const ProductDetails = () => {
                 {/* product image  */}
                 <div className="flex flex-col items-center">
                   <div className="overflow-hidden rounded-lg max-w-[30rem] max-h-[35rem]">
-                    {!img ? <img src={singleProductData.imageUrl[0]} className="h-full w-full object-cover object-center" /> :
+                    {!img ? <img alt="" src={singleProductData.imageUrl[0]} className="h-full w-full object-cover object-center" /> :
                       <img
                         src={img}
                         alt=""
@@ -281,12 +305,12 @@ const ProductDetails = () => {
                       />}
                   </div>
                   <div className="flex flex-wrap space-x-5 justify-center">
-                    {singleProductData.imageUrl.map((item) => (
-                      <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4 hover:border-2 hover:border-black">
+                    {singleProductData.imageUrl.map((item, index) => (
+                      <div key={index} className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4 hover:border-2 hover:border-black">
                         <img
                           src={item}
                           onMouseOver={() => setImg(item)}
-                          // alt={item}
+                          alt=""
                           className="flex h-full w-full object-cover object-top"
                         />
                       </div>
@@ -318,7 +342,7 @@ const ProductDetails = () => {
                         ))}
                         <p className="opacity-50 text-sm ml-3">{totalRating} Ratings</p>
                         <p className="text-sm font-medium ml-3 text-indigo-600 hover:text-indigo-500">
-                          3870 Reviews
+                          {totalReview} Reviews
                         </p>
                       </div>
                       <p>Rating: {sumRating.toFixed(1)}/5</p>
@@ -397,46 +421,65 @@ const ProductDetails = () => {
                 </div>
                 <div className="border border-gray-300">
                   <div className="grid grid-cols-1 lg:grid-cols-2">
-                    <div>
-                      {[1, 2, 3].map((item) => (
-                        <ProductReviewCard />
-                      ))}
-                    </div>
-                    <div className="my-3 px-4">
-                      <h1 className="font-semibold">Product Ratings</h1>
-                      <div className="flex gap-2 items-center">
-                        <div className="flex text-yellow-500">
-                          {startArray.map((el, i) => (
-                            <h1
-                              key={el.id}
-                              className="text-yellow-500 text-xl"
-                            >
-                              {sumRating > i ? el.icon : el.icon1}
-                            </h1>
+                    {getReview?.length > 0 ? (
+                      <>
+                        <div>
+                          {getReview.slice(0, 3).map((item) => (
+                            <ProductReviewCard data={item} />
+                          ))}
+                          <div className="flex justify-center">
+                            <button onClick={() => navigate(`/allreview/${P_ID}`)} className="text-center text-blue-600 underline underline-offset-4 hover:text-blue-400">Show All Review & Rating</button>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="p-5">
+                        <h1 className="text-xl font-bold">No Review founded</h1>
+                      </div>
+                    )}
+                    {totalRating > 0 ? (
+                      <div className="my-3 px-4">
+                        <h1 className="font-semibold">Product Ratings</h1>
+                        <div className="flex gap-2 items-center">
+                          <div className="flex text-yellow-500">
+                            {startArray.map((el, i) => (
+                              <h1
+                                key={el.id}
+                                className="text-yellow-500 text-xl"
+                              >
+                                {sumRating > i ? el.icon : el.icon1}
+                              </h1>
+                            ))}
+                          </div>
+                          <div>
+                            <h1 className="opacity-70">{totalRating} Ratings</h1>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-3 mt-8">
+                          {Ratingpercentage.map((item) => (
+                            <div className="flex items-center">
+                              <div className="w-24 pr-2">
+                                <p>{item.name}</p>
+                              </div>
+                              {/* <div></div> */}
+                              <div className="h-2 bg-gray-200 w-[60%] lg:w-[40%] rounded-full">
+                                <div
+                                  className={`h-2 ${item.color} rounded-full `}
+                                  style={{ width: `${starPercentage[item.percentage]}%` }}
+                                ></div>
+                              </div>
+                              <span className="pl-5">{`${(starPercentage[item.percentage])?.toFixed(0)}%`}</span>
+                            </div>
                           ))}
                         </div>
-                        <div>
-                          <h1 className="opacity-70">{totalRating} Ratings</h1>
-                        </div>
                       </div>
-                      <div className="flex flex-col gap-3 mt-8">
-                        {Ratingpercentage.map((item) => (
-                          <div className="flex items-center">
-                            <div className="w-24 pr-2">
-                              <p>{item.name}</p>
-                            </div>
-                            {/* <div></div> */}
-                            <div className="h-2 bg-gray-200 w-[60%] lg:w-[40%] rounded-full">
-                              <div
-                                className={`h-2 ${item.color} rounded-full `}
-                                style={{ width: starPercentage[item.percentage] }}
-                              ></div>
-                            </div>
-                            <span className="pl-5">{`${(starPercentage[item.percentage]).toFixed(0)}%`}</span>
-                          </div>
-                        ))}
+                    ) : (
+                      <div className="p-5">
+                        <h1 className="text-xl font-bold">No Rating found</h1>
                       </div>
-                    </div>
+                    )}
+
+
                   </div>
                   <div className="grid grid-cols-1 lg:grid-cols-2">
                     <div className="flex flex-col space-y-5 p-5">

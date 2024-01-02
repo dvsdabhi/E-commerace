@@ -22,7 +22,7 @@ const Navigation1 = () => {
   const [userProfile, setUserProfile] = useState(false);
 
   const navigate = useNavigate();
-  const isLogin = useSelector((state)=>state.auth.isAuth);
+  const isLogin = useSelector((state) => state.auth.isAuth);
   // console.log(selector);
 
   const OpenSideBar = () => {
@@ -56,16 +56,15 @@ const Navigation1 = () => {
                 <li>
                   <Link
                     to={"#"}
-                    className={`${
-                      Id === "women" &&
+                    className={`${Id === "women" &&
                       "text-blue-700 underline underline-offset-8"
-                    }`}
+                      }`}
                     onMouseEnter={() => handleMouseEnter("women")}
                   >
                     Women
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     to={"#"}
                     className={`${
@@ -78,7 +77,7 @@ const Navigation1 = () => {
                   >
                     Men
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     to={"#"}
@@ -104,13 +103,13 @@ const Navigation1 = () => {
             {isLogin ? <CgProfile
               onClick={handleUserProfile}
               className="text-2xl cursor-pointer"
-            />:<button
-            className="hover:text-blue-700 hover:bg-pink-50 p-2"
-            onClick={handleSignup}
-          >
-            SIGNIN
-          </button>}
-            
+            /> : <button
+              className="hover:text-blue-700 hover:bg-pink-50 p-2"
+              onClick={handleSignup}
+            >
+              SIGNIN
+            </button>}
+
             {/* <CgProfile
               onClick={handleUserProfile}
               className="text-2xl cursor-pointer"
@@ -138,14 +137,16 @@ const Navigation1 = () => {
           onClick={OpenSideBar}
         />
         <div className="flex items-center gap-2 p-5 sm:p-0 xsm:p-0">
-          <button
-            className="hover:text-blue-700 hover:bg-pink-50 p-2 md:hidden lg:hidden xl:hidden 2xl:hidden"
+          {isLogin ? <CgProfile
+            onClick={handleUserProfile}
+            className="text-2xl cursor-pointer md:hidden"
+          /> : <button
+            className="hover:text-blue-700 hover:bg-pink-50 p-2"
             onClick={handleSignup}
           >
             SIGNIN
-          </button>
-          <CgProfile className="text-2xl md:hidden lg:hidden xl:hidden 2xl:hidden" />
-          <FaCartShopping className="text-xl md:hidden lg:hidden xl:hidden 2xl:hidden cursor-pointer" />
+          </button>}
+          <HiOutlineShoppingBag onClick={() => { navigate("/cart") }} className="text-xl md:hidden lg:hidden xl:hidden 2xl:hidden cursor-pointer" />
         </div>
         {signup && (
           <Signup signup={signup} setSignup={setSignup} setSignin={setSignin} />

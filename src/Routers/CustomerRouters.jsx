@@ -16,6 +16,7 @@ import OrderSummary from "../customer/components/Checkout/OrderSummary";
 import Payment from "../customer/components/Checkout/Payment";
 import Success from "../customer/components/Checkout/Success";
 import ViewProfile from "../customer/components/Profile/ViewProfile";
+import Allreview from "../customer/components/ProductDetails/Allreview";
 const Allrouter = () => {
   return (
     <>
@@ -41,6 +42,7 @@ const Allrouter = () => {
             element={<OrderDetails />}
           />
           <Route path="/ordersummary" element={<OrderSummary />} />
+          <Route path="/allreview/:productId" element={<Allreview />} />
         </Routes>
       </div>
       <div>

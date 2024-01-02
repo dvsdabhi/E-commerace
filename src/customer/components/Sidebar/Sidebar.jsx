@@ -30,9 +30,12 @@ const Sidebar = ({ setOpenMenu }) => {
                 </>
               ))}
             </TabList>
+            <div className="border-b py-4">
+              <Link to={`/`} onClick={close_Sidebar} >Home</Link>
+            </div>
             {navigation.categories.map((category) => (
               <TabPanel key={category.name} className="py-5">
-                <div className="flex gap-3">
+                {/* <div className="flex gap-3">
                   {category.featured.map((item) => (
                     <div className="py-4">
                       <img
@@ -48,7 +51,7 @@ const Sidebar = ({ setOpenMenu }) => {
                       </div>
                     </div>
                   ))}
-                </div>
+                </div> */}
                 <div>
                   {category.sections.map((item) => (
                     <>
@@ -59,7 +62,7 @@ const Sidebar = ({ setOpenMenu }) => {
                         {item.items.map((product) => (
                           <ul>
                             <li>
-                              <Link to="" className="text-gray-500">
+                              <Link onClick={close_Sidebar} to={`/${category.id}/${item.id}/${product.name}`} className="text-gray-500">
                                 {product.name}
                               </Link>
                             </li>
@@ -83,14 +86,14 @@ const Sidebar = ({ setOpenMenu }) => {
             </button>
           </div>
 
-          <div className="flex flex-col items-start gap-4 border-b text-lg py-4 mb-6">
+          {/* <div className="flex flex-col items-start gap-4 border-b text-lg py-4 mb-6">
             <button>
               <Link>Sign in</Link>
             </button>
             <button>
               <Link>Create account</Link>
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

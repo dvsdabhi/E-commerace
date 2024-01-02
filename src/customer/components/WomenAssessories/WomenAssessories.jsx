@@ -22,9 +22,8 @@ const WomenAssessories = ({
   return (
     <>
       <div
-        className={`transition-transform transform ${
-          womenAccessoriesData ? "max-h-screen" : "max-h-none"
-        } flex justify-between w-full bg-white py-16 px-24 absolute z-50 mt-0 sm:hidden xsm:hidden md:flex xl:flex 2xl:flex shadow-2xl`}
+        className={`transition-transform transform ${womenAccessoriesData ? "max-h-screen" : "max-h-none"
+          } flex justify-between w-full bg-white py-16 px-24 absolute z-50 mt-0 sm:hidden xsm:hidden md:flex xl:flex 2xl:flex shadow-2xl`}
         onMouseLeave={() => {
           handleMouseLeave();
           setID("");
@@ -84,9 +83,6 @@ const WomenAssessories = ({
               </div>
             </>
           ))}
-          {/* <div>Clothing</div>
-          <div>Accessories</div>
-          <div>Brands</div> */}
         </div>
       </div>
     </>
