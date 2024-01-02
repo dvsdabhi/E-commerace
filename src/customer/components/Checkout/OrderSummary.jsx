@@ -20,7 +20,7 @@ const OrderSummary = () => {
 
   const handleAddress = async () => {
     const response = await axios.get(
-      "http://localhost:8080/api/orderSummaryAdd",
+      `${process.env.LOCALHOST_URL}api/orderSummaryAdd`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ const OrderSummary = () => {
   };
 
   const showBuyProduct = async () => {
-    const response = await axios.get("http://localhost:8080/api/cartitem", {
+    const response = await axios.get(`${process.env.LOCALHOST_URL}api/cartitem`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -70,7 +70,7 @@ const OrderSummary = () => {
     };
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/order/createOrder",
+        `${process.env.LOCALHOST_URL}order/createOrder`,
         data,
         {
           headers: {

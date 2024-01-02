@@ -16,7 +16,7 @@ const Order = () => {
     try {
       setOrderLoading(true);
       const response = await axios.get(
-        "http://localhost:8080/api/admin/orders"
+        `${process.env.LOCALHOST_URL}api/admin/orders`
       );
       // console.log(response.data.orders);
       setOrder(response.data.orders);
@@ -34,7 +34,7 @@ const Order = () => {
     console.log("orderId----", orderId);
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/admin/order/${orderId}`
+        `${process.env.LOCALHOST_URL}api/admin/order/${orderId}`
       );
       console.log(response.data.message);
       viewOrders();

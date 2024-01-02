@@ -12,7 +12,7 @@ const ViewProfile = () => {
   const token = localStorage.getItem("authToken");
   const handleProfile = async () => {
     try {
-      const user = await axios.get("http://localhost:8080/api/users/profile", {
+      const user = await axios.get(`${process.env.LOCALHOST_URL}api/users/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -39,7 +39,7 @@ const ViewProfile = () => {
   const update_profile = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/users/profile/update",
+        `${process.env.LOCALHOST_URL}api/users/profile/update`,
         newData,
         {
           headers: {

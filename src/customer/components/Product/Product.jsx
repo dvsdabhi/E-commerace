@@ -91,7 +91,7 @@ export default function Product() {
       try {
         setProductLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/api/search/price/${params.lavelOne}/${params.lavelThree}/${price_range}`
+          `${process.env.LOCALHOST_URL}api/search/price/${params.lavelOne}/${params.lavelThree}/${price_range}`
         );
         setAllProductData(response.data.filterPriceRange);
         setProductLoading(false);
@@ -119,7 +119,7 @@ export default function Product() {
       try {
         setProductLoading(true);
         const response = await axios.get(
-          `http://localhost:8080/api/search/percentage/${params.lavelOne}/${params.lavelThree}/${dis_value}`
+          `${process.env.LOCALHOST_URL}api/search/percentage/${params.lavelOne}/${params.lavelThree}/${dis_value}`
         );
         setAllProductData(response.data.filterPercentage);
         setProductLoading(false);

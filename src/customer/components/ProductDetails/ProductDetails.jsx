@@ -181,7 +181,7 @@ const ProductDetails = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/cart",
+        `${process.env.LOCALHOST_URL}api/cart`,
         {
           id: P_ID,
           size: selectedOption
@@ -204,7 +204,7 @@ const ProductDetails = () => {
   // add rating logic
   const AddRating = async () => {
     try {
-      const res = await axios.post(`http://localhost:8080/api/rating/${P_ID}`,
+      const res = await axios.post(`${process.env.LOCALHOST_URL}api/rating/${P_ID}`,
         { rating },
         {
           headers: {
@@ -221,7 +221,7 @@ const ProductDetails = () => {
   // getRating logic
   const Get_Rating = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/totalRating/${P_ID}`);
+      const res = await axios.get(`${process.env.LOCALHOST_URL}api/totalRating/${P_ID}`);
       setSumRating(res.data.overallRating);
       setTotalRating(res.data.totalRatings);
       setStarPercentage({
@@ -246,7 +246,7 @@ const ProductDetails = () => {
     e.preventDefault();
     // console.log("addReview------------------", addReview);
     try {
-      const res = await axios.post(`http://localhost:8080/api/review/${P_ID}`,
+      const res = await axios.post(`${process.env.LOCALHOST_URL}api/review/${P_ID}`,
         { addReview },
         {
           headers: {
@@ -262,7 +262,7 @@ const ProductDetails = () => {
 
   const Get_Review = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/totalReview/${P_ID}`,
+      const res = await axios.get(`${process.env.LOCALHOST_URL}api/totalReview/${P_ID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

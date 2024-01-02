@@ -7,7 +7,7 @@ const AddressCard = ({ address, setSelectAddress }) => {
   const handleSelectAddress = async (id) => {
     console.log("id", id);
     const response = await axios.put(
-      "http://localhost:8080/api/selectAddress",
+      `${process.env.LOCALHOST_URL}api/selectAddress`,
       { _id: id },
       {
         headers: {

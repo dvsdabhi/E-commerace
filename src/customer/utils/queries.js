@@ -1,3 +1,4 @@
+require('dotenv').config();
 import axios from "axios";
 
 // signUp api call
@@ -12,7 +13,7 @@ export const signUp = async (signUpData) => {
 // signIn api call
 export const signIn = async (signInData,token) => {
   const response = await axios.post(
-    `http://localhost:8080/api/auth/signin`,
+    `${process.env.LOCALHOST_URL}api/auth/signin`,
     signInData,{
       headers: {
         Authorization: `Bearer ${token}`,
@@ -26,7 +27,7 @@ export const signIn = async (signInData,token) => {
 
 export const getAllProduct = async () => {
   const response = await axios.get(
-    "http://localhost:8080/api/admin/product"
+    `${process.env.LOCALHOST_URL}api/admin/product`
   );
   return response;
 };
@@ -36,7 +37,7 @@ export const getAllProduct = async () => {
 export const getFilterProduct = async (lavelOne,lavelThree) => {
   console.log(lavelOne,lavelThree);
   const response = await axios.get(
-    `http://localhost:8080/api/admin/product/${lavelOne}/${lavelThree}`
+    `${process.env.LOCALHOST_URL}api/admin/product/${lavelOne}/${lavelThree}`
   );
   return response;
 };
@@ -45,7 +46,7 @@ export const getFilterProduct = async (lavelOne,lavelThree) => {
 // const token = localStorage.getItem("authToken");
 export const getSingleProduct = async (productID) => {
   const response = await axios.get(
-    `http://localhost:8080/api/admin/get/single/product/${productID}`
+    `${process.env.LOCALHOST_URL}api/admin/get/single/product/${productID}`
   );
   return response;
 };
@@ -54,7 +55,7 @@ export const getSingleProduct = async (productID) => {
 export const removeCartProduct = async (id) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/cartitem/${id}`
+      `${process.env.LOCALHOST_URL}api/cartitem/${id}`
     );
     return response;
   } catch (error) {

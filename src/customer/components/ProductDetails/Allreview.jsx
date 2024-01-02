@@ -45,7 +45,7 @@ const Allreview = () => {
     const Get_Review = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8080/api/totalReview/${P_ID}`,
+            const res = await axios.get(`${process.env.LOCALHOST_URL}api/totalReview/${P_ID}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

@@ -17,7 +17,7 @@ const Order = () => {
   const handleOrder = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/order/getOrder",
+        `${process.env.LOCALHOST_URL}api/order/getOrder`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

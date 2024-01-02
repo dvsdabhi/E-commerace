@@ -13,7 +13,7 @@ const Product = () => {
   const handleViewProduct = async () => {
     try {
       setProductLoading(true);
-      const res = await axios.get("http://localhost:8080/api/admin/product");
+      const res = await axios.get(`${process.env.LOCALHOST_URL}api/admin/product`);
       setProductLoading(false);
       setProduct(res.data.product);
     } catch (error) {
@@ -28,7 +28,7 @@ const Product = () => {
   const handleDeleteProduct = async (productId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/admin/product/${productId}`
+        `${process.env.LOCALHOST_URL}api/admin/product/${productId}`
       );
       console.log(response.data.message);
     } catch (error) {

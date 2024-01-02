@@ -14,7 +14,7 @@ const OrderDetails = () => {
   const handleOrderDetails = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/order/${orderId1}/${orderId2}`
+        `${process.env.LOCALHOST_URL}api/order/${orderId1}/${orderId2}`
       );
       setAddress(response.data.order.shippingAddress);
       setProduct(response.data.order.buyProduct);

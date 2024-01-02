@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import SignIn from "../SignIn/SignIn";
 import { AiOutlineCloseSquare } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { checkAuth } from "../../../redux/features/Auth.js";
 import { signUp } from "../../utils/queries";
