@@ -20,7 +20,7 @@ const OrderSummary = () => {
 
   const handleAddress = async () => {
     const response = await axios.get(
-      `${process.env.LOCALHOST_URL}api/orderSummaryAdd`,
+      `https://node-mongodb-api-4zq2.onrender.com/api/orderSummaryAdd`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ const OrderSummary = () => {
   };
 
   const showBuyProduct = async () => {
-    const response = await axios.get(`${process.env.LOCALHOST_URL}api/cartitem`, {
+    const response = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/cartitem`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -70,7 +70,7 @@ const OrderSummary = () => {
     };
     try {
       const response = await axios.post(
-        `http://localhost:8080/order/createOrder`,
+        `https://node-mongodb-api-4zq2.onrender.com/api/order/createOrder`,
         data,
         {
           headers: {

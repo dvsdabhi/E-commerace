@@ -27,7 +27,7 @@ const UpdateProduct = () => {
   const handleUpdateProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/admin/get/single/product/${params.id}`
+        `https://node-mongodb-api-4zq2.onrender.com/api/admin/get/single/product/${params.id}`
       );
       setProduct(response.data.singleProduct);
       setIsEditMode(true);
@@ -66,7 +66,7 @@ const UpdateProduct = () => {
     try {
       // Perform your API call to update the product
       const response = await axios.put(
-        `http://localhost:8080/api/admin/product/update/${params.id}`,
+        `https://node-mongodb-api-4zq2.onrender.com/api/admin/product/update/${params.id}`,
         product
       );
       toast.success("Product details updated successfully");

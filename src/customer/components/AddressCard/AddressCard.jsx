@@ -7,7 +7,7 @@ const AddressCard = ({ address, setSelectAddress }) => {
   const handleSelectAddress = async (id) => {
     console.log("id", id);
     const response = await axios.put(
-      `http://localhost:8080/api/selectAddress`,
+      `https://node-mongodb-api-4zq2.onrender.com/api/selectAddress`,
       { _id: id },
       {
         headers: {

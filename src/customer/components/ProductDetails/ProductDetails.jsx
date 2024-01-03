@@ -181,7 +181,7 @@ const ProductDetails = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/cart`,
+        `https://node-mongodb-api-4zq2.onrender.com/api/cart`,
         {
           id: P_ID,
           size: selectedOption
@@ -205,7 +205,7 @@ const ProductDetails = () => {
   const AddRating = async () => {
     if (token) {
       try {
-        const res = await axios.post(`http://localhost:8080/api/rating/${P_ID}`,
+        const res = await axios.post(`https://node-mongodb-api-4zq2.onrender.com/api/rating/${P_ID}`,
           { rating },
           {
             headers: {
@@ -225,7 +225,7 @@ const ProductDetails = () => {
   // getRating logic
   const Get_Rating = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/totalRating/${P_ID}`);
+      const res = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/totalRating/${P_ID}`);
       setSumRating(res.data.overallRating);
       setTotalRating(res.data.totalRatings);
       setStarPercentage({
@@ -250,7 +250,7 @@ const ProductDetails = () => {
     e.preventDefault();
     // console.log("addReview------------------", addReview);
     try {
-      const res = await axios.post(`http://localhost:8080/api/review/${P_ID}`,
+      const res = await axios.post(`https://node-mongodb-api-4zq2.onrender.com/api/review/${P_ID}`,
         { addReview },
         {
           headers: {
@@ -266,7 +266,7 @@ const ProductDetails = () => {
 
   const Get_Review = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/totalReview/${P_ID}`,
+      const res = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/totalReview/${P_ID}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

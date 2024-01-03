@@ -17,7 +17,7 @@ const Order = () => {
   const handleOrder = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/order/getOrder`,
+        `https://node-mongodb-api-4zq2.onrender.com/api/order/getOrder`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

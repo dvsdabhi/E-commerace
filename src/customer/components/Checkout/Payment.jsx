@@ -16,7 +16,7 @@ const Payment = () => {
   const handlePayment = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/checkout/${orderId}`
+        `https://node-mongodb-api-4zq2.onrender.com/api/checkout/${orderId}`
       );
       console.log("response------>>>>>>>><<<<<<<---------", response);
       if (response.data.resData.paymentLinkUrl) {

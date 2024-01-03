@@ -41,7 +41,7 @@ const DeliveryAddressForm = () => {
     console.log("token", token);
     console.log("formData---", formData);
     const response = await axios.post(
-      `http://localhost:8080/api/address`,
+      `https://node-mongodb-api-4zq2.onrender.com/api/address`,
       formData,
       {
         headers: {
@@ -55,7 +55,7 @@ const DeliveryAddressForm = () => {
   const handleAddress = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/userAddress`,
+        `https://node-mongodb-api-4zq2.onrender.com/api/userAddress`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

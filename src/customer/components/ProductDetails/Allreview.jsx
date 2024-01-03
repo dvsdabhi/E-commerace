@@ -45,7 +45,7 @@ const Allreview = () => {
     const Get_Review = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8080/api/totalReview/${P_ID}`,
+            const res = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/totalReview/${P_ID}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

@@ -19,7 +19,7 @@ const Cart = () => {
   };
   const token = localStorage.getItem("authToken");
   const get_cart_product = async () => {
-    const res = await axios.get(`http://localhost:8080/api/cartitem`, {
+    const res = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/cartitem`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -49,7 +49,7 @@ const Cart = () => {
   const handleQty = async (product_Id, action) => {
     console.log("gfugify", product_Id, action);
     const res = await axios.put(
-      `http://localhost:8080/api/cartitem/${product_Id}`,
+      `https://node-mongodb-api-4zq2.onrender.com/api/cartitem/${product_Id}`,
       { action }
     );
   };

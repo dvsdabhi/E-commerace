@@ -3,7 +3,7 @@ import axios from "axios";
 // signUp api call
 export const signUp = async (signUpData) => {
   const response = await axios.post(
-    `http://localhost:8080/api/auth/signup`,
+    `https://node-mongodb-api-4zq2.onrender.com/api/auth/signup`,
     signUpData
   );
   return response;
@@ -12,7 +12,7 @@ export const signUp = async (signUpData) => {
 // signIn api call
 export const signIn = async (signInData,token) => {
   const response = await axios.post(
-    `http://localhost:8080/api/auth/signin`,
+    `https://node-mongodb-api-4zq2.onrender.com/api/auth/signin`,
     signInData,{
       headers: {
         Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ export const signIn = async (signInData,token) => {
 
 export const getAllProduct = async () => {
   const response = await axios.get(
-    `http://localhost:8080/api/admin/product`
+    `https://node-mongodb-api-4zq2.onrender.com/api/admin/product`
   );
   return response;
 };
@@ -45,7 +45,7 @@ export const getFilterProduct = async (lavelOne,lavelThree) => {
 // const token = localStorage.getItem("authToken");
 export const getSingleProduct = async (productID) => {
   const response = await axios.get(
-    `http://localhost:8080/api/admin/get/single/product/${productID}`
+    `https://node-mongodb-api-4zq2.onrender.com/api/admin/get/single/product/${productID}`
   );
   return response;
 };
@@ -54,7 +54,7 @@ export const getSingleProduct = async (productID) => {
 export const removeCartProduct = async (id) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/cartitem/${id}`
+      `https://node-mongodb-api-4zq2.onrender.com/api/cartitem/${id}`
     );
     return response;
   } catch (error) {
