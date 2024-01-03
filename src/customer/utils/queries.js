@@ -36,7 +36,7 @@ export const getAllProduct = async () => {
 export const getFilterProduct = async (lavelOne,lavelThree) => {
   console.log(lavelOne,lavelThree);
   const response = await axios.get(
-    `http://localhost:8080/api/admin/product/${lavelOne}/${lavelThree}`
+    `https://node-mongodb-api-4zq2.onrender.com/api/admin/product/${lavelOne}/${lavelThree}`
   );
   return response;
 };
