@@ -9,7 +9,7 @@ const Customer = () => {
   const handleUser = async () => {
     try {
       setcustomerLoading(true);
-      const response = await axios.get(`${process.env.LOCALHOST_URL}api/admin/users`);
+      const response = await axios.get(`http://localhost:8080/api/admin/users`);
       setUser(response.data.user);
       setcustomerLoading(false);
     } catch (error) {

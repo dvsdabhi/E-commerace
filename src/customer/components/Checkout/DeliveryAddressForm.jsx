@@ -41,7 +41,7 @@ const DeliveryAddressForm = () => {
     console.log("token", token);
     console.log("formData---", formData);
     const response = await axios.post(
-      `${process.env.LOCALHOST_URL}api/address`,
+      `http://localhost:8080/api/address`,
       formData,
       {
         headers: {
@@ -55,7 +55,7 @@ const DeliveryAddressForm = () => {
   const handleAddress = async () => {
     try {
       const response = await axios.get(
-        `${process.env.LOCALHOST_URL}api/userAddress`,
+        `http://localhost:8080/api/userAddress`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

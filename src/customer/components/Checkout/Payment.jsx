@@ -16,7 +16,7 @@ const Payment = () => {
   const handlePayment = async () => {
     try {
       const response = await axios.post(
-        `${process.env.LOCALHOST_URL}api/checkout/${orderId}`
+        `http://localhost:8080/api/checkout/${orderId}`
       );
       console.log("response------>>>>>>>><<<<<<<---------", response);
       if (response.data.resData.paymentLinkUrl) {

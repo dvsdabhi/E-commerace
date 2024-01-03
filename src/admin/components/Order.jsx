@@ -16,7 +16,7 @@ const Order = () => {
     try {
       setOrderLoading(true);
       const response = await axios.get(
-        `${process.env.LOCALHOST_URL}api/admin/orders`
+        `http://localhost:8080/api/admin/orders`
       );
       // console.log(response.data.orders);
       setOrder(response.data.orders);

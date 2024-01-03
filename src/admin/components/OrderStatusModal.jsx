@@ -10,7 +10,7 @@ const OrderStatusModal = ({ order_id, isModalOpen, setIsModalOpen, viewOrders })
     console.log("buttonText====", orderStatus);
     try {
       const response = await axios.put(
-        `${process.env.LOCALHOST_URL}api/admin/orders/status/${order_id}`,
+        `http://localhost:8080/api/admin/orders/status/${order_id}`,
         { orderStatus }
       );
       console.log(response);

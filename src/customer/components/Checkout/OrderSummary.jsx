@@ -70,7 +70,7 @@ const OrderSummary = () => {
     };
     try {
       const response = await axios.post(
-        `${process.env.LOCALHOST_URL}order/createOrder`,
+        `http://localhost:8080/order/createOrder`,
         data,
         {
           headers: {
