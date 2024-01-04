@@ -9,6 +9,8 @@ import { addProductRating, getSingleProduct } from "../../utils/queries";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { RingLoader } from "react-spinners";
+import { get_similarProduct } from "../../utils/queries";
+import { useSelector } from "react-redux";
 
 
 const ProductDetails = () => {
@@ -79,6 +81,7 @@ const ProductDetails = () => {
   const [singleProductData, setSingleProductData] = useState();
   const [ProductLoading, setProductLoading] = useState("");
   const [img, setImg] = useState("");
+  const [similer, setSimiler] = useState([]);
 
 
   const navigate = useNavigate();
@@ -99,9 +102,17 @@ const ProductDetails = () => {
     }
   };
 
+  const get_similar_product = async () => {
+    const res = await get_similarProduct(P_ID);
+    setSimiler(res.data.product);
+  }
+
   useEffect(() => {
     get_single_Product();
-  }, []);
+    get_similar_product();
+  }, [P_ID]);
+
+  const isLogin = useSelector((state) => state.auth.isAuth);
 
   const token = localStorage.getItem("authToken");
 
@@ -203,7 +214,7 @@ const ProductDetails = () => {
 
   // add rating logic
   const AddRating = async () => {
-    if (token) {
+    if (isLogin) {
       try {
         const res = await axios.post(`https://node-mongodb-api-4zq2.onrender.com/api/rating/${P_ID}`,
           { rating },
@@ -248,19 +259,22 @@ const ProductDetails = () => {
   // Add review logic
   const AddReview = async (e) => {
     e.preventDefault();
-    // console.log("addReview------------------", addReview);
-    try {
-      const res = await axios.post(`https://node-mongodb-api-4zq2.onrender.com/api/review/${P_ID}`,
-        { addReview },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+    if (isLogin) {
+      try {
+        const res = await axios.post(`https://node-mongodb-api-4zq2.onrender.com/api/review/${P_ID}`,
+          { addReview },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
-      toast.success(res.data.message);
-    } catch (error) {
-      toast.error(error.response.data.message);
+        );
+        toast.success(res.data.message);
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    } else {
+      toast.error("login your account");
     }
   }
 
@@ -533,7 +547,7 @@ const ProductDetails = () => {
               <section className="flex flex-col items-center lg:items-start px-10 lg:px-14 py-5">
                 <h1 className="pb-5 text-xl font-bold ml-3">Similer Products</h1>
                 <div className="flex flex-wrap space-y-5 space-x-2">
-                  {mens_kurta.map((item) => (
+                  {similer.map((item) => (
                     <HomeSectionCard product={item} />
                   ))}
                 </div>

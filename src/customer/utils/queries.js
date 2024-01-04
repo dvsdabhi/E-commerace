@@ -61,3 +61,21 @@ export const removeCartProduct = async (id) => {
     console.log("delete error", error);
   }
 };
+
+// get new updated dresses
+export const get_dresses = async() => {
+  const response = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/admin/dresses`);
+  return response;
+}
+
+// get new updated sarees
+export const get_sarees = async() => {
+  const response = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/admin/sarees`);
+  return response;
+}
+
+// get similer product
+export const get_similarProduct = async (id) => {
+  const response = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/admin/similarproduct/${id}`);
+  return response;
+}
