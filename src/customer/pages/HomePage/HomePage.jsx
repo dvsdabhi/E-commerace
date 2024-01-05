@@ -38,6 +38,8 @@ const HomePage = () => {
   console.log(saree);
   return (
     <>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7720645820159469"
+     crossorigin="anonymous"></script>
       <div className="relative">
         <div className="mt-9">
           <MainCarousel />
