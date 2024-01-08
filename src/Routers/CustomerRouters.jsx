@@ -17,6 +17,8 @@ import Payment from "../customer/components/Checkout/Payment";
 import Success from "../customer/components/Checkout/Success";
 import ViewProfile from "../customer/components/Profile/ViewProfile";
 import Allreview from "../customer/components/ProductDetails/Allreview";
+import VerifyOtp from "../customer/pages/OtpVerifyPage/VerifyOtp";
+
 const Allrouter = () => {
   return (
     <>
@@ -43,6 +45,7 @@ const Allrouter = () => {
           />
           <Route path="/ordersummary" element={<OrderSummary />} />
           <Route path="/allreview/:productId" element={<Allreview />} />
+          <Route path="/user/verify-otp" element={<VerifyOtp />} />
         </Routes>
       </div>
       <div>

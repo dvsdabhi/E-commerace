@@ -10,6 +10,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import WomenAssessories from "../WomenAssessories/WomenAssessories";
 import Signup from "../Signup/Signup";
 import SignIn from "../SignIn/SignIn";
+import ForgotPassword from "../ForgotPassword/ForgotPassword";
 import UserProfile from "../Profile/UserProfile";
 import { useSelector } from "react-redux";
 
@@ -19,6 +20,7 @@ const Navigation1 = () => {
   const [Id, setID] = useState("");
   const [signup, setSignup] = useState(false);
   const [signInbox, setSignin] = useState(false);
+  const [forgotpwd, setForgotpwd] = useState(false);
   const [userProfile, setUserProfile] = useState(false);
 
   const navigate = useNavigate();
@@ -36,6 +38,10 @@ const Navigation1 = () => {
   const handleSignup = () => {
     setSignup(!signup);
   };
+
+  const handleForgotPassword = () => {
+    setForgotpwd(!forgotpwd);
+  }
 
   const handleMouseEnter = (id) => {
     setWomenAccessories(true);
@@ -136,7 +142,7 @@ const Navigation1 = () => {
           className="text-2xl md:hidden lg:hidden xl:hidden 2xl:hidden"
           onClick={OpenSideBar}
         />
-        <div className="flex items-center gap-2 p-5 sm:p-0 xsm:p-0">
+        <div className="flex items-center gap-2 p-5 sm:p-0 xsm:p-0  md:hidden lg:hidden xl:hidden 2xl:hidden">
           {isLogin ? <CgProfile
             onClick={handleUserProfile}
             className="text-2xl cursor-pointer md:hidden"
@@ -151,7 +157,12 @@ const Navigation1 = () => {
         {signup && (
           <Signup signup={signup} setSignup={setSignup} setSignin={setSignin} />
         )}
-        {signInbox && <SignIn setSignup={setSignup} setSignin={setSignin} />}
+        {signInbox && (
+          <SignIn setSignup={setSignup} setSignin={setSignin} setForgotpwd={setForgotpwd} />
+        )}
+        {forgotpwd && (
+          <ForgotPassword setForgotpwd={setForgotpwd} forgotpwd={forgotpwd}/>
+        )}
       </div>
       {OpenMenu === true && <Sidebar setOpenMenu={setOpenMenu} />}
       {womenAccessoriesData && (

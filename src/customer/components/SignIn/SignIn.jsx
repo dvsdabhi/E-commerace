@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { signIn } from "../../utils/queries";
 import { useNavigate } from "react-router-dom";
 
-const SignIn = ({ setSignup, setSignin }) => {
+const SignIn = ({ setSignup, setSignin, setForgotpwd }) => {
   const [signInData, setSignInData] = useState({
     email: "",
     password: "",
@@ -54,6 +54,11 @@ const SignIn = ({ setSignup, setSignin }) => {
     setSignin(false);
   };
 
+  const handleForgotPassword = () => {
+    setSignin(false);
+    setForgotpwd(true);
+  }
+
   return (
     <>
       <div className="h-screen flex fixed z-50 top-0 left-0 items-center w-full justify-center bg-black bg-opacity-50">
@@ -91,6 +96,7 @@ const SignIn = ({ setSignup, setSignin }) => {
                 LOGIN
               </button>
             </form>
+            <p className="text-gray-600 cursor-pointer" onClick={handleForgotPassword}>Forgot password?</p>
             <p className="my-3">
               don't have account ?
               <span

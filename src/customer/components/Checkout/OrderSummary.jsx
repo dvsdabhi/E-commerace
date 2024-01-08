@@ -5,6 +5,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const OrderSummary = () => {
+  // const [orderId, setOrderId] = useState('');
+  // const [paymentDetails, setPaymentDetails] = useState();
+
   const [address, setAddress] = useState({});
   const [buyProduct, setBuyProduct] = useState();
   const [totalItem, setTotalItem] = useState();
@@ -60,13 +63,14 @@ const OrderSummary = () => {
     showBuyProduct();
   }, []);
 
-  const handleOrder = async () => {
+  const handleOrder = async (paymentDetails) => {
     const data = {
       totalPrice: subTotalPrice.toFixed(0),
       totalDiscountedPrice: totalPrice.toFixed(0),
       discount: (subTotalPrice - totalPrice).toFixed(0),
       totalItem: totalItem,
-      buyProduct: buyProduct
+      buyProduct: buyProduct,
+      // paymentResponse: paymentDetails, // Add payment response to order data
     };
     try {
       const response = await axios.post(
@@ -79,14 +83,75 @@ const OrderSummary = () => {
         }
       );
       console.log("response----------", response);
-      navigate(`/checkout/${response.data.order._id}`, { state: { data: totalPrice.toFixed(0) } });
+      if (response.data.status === 200) {
+        // setOrderId(response.data.order._id);
+        const orderId = response.data.order._id;
+        try {
+          const res = await axios.post(`http://localhost:8080/api/addPaymentDetails`,
+            {
+              orderId,
+              paymentDetails
+            });
+          console.log("res------------", res);
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+      // navigate(`/checkout/${response.data.order._id}`, { state: { data: totalPrice.toFixed(0) } });
       // navigate("/checkout?step=4", { state: { data: totalPrice.toFixed(0) } });
     } catch (error) {
       console.log(error);
     }
   };
 
-  // console.log("address", buyProduct);
+  const handlePayment = async () => {
+    try {
+      const res = await axios.post(`http://localhost:8080/api/createorder`, {
+        amount: totalPrice.toFixed(0),
+        currency: "INR"
+      });
+      console.log("res", res);
+      const { order } = res.data;
+      // setOrderId(order.id);
+
+      const options = {
+        key: 'rzp_test_FIAcb2qs5PCnqA',
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Your Store',
+        description: 'Payment for Your Order',
+        order_id: order.id,
+        handler: function (response) {
+          // Handle the success callback
+          console.log('Payment success:', response);
+          // setPaymentDetails(response);
+          handleOrder(response);
+          // const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = res;
+          // Use razorpay_order_id, razorpay_payment_id, and razorpay_signature as needed
+        },
+        prefill: {
+          name: 'User Name',
+          email: 'user@example.com',
+        },
+        notes: {
+          address: 'Your Address',
+        },
+      };
+
+      if (window.Razorpay) {
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
+      } else {
+        console.error('Razorpay script not loaded');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+
+
+  // console.log("address", paymentDetails);
   return (
     <>
       <div className="flex flex-col space-y-8 my-5">
@@ -156,7 +221,7 @@ const OrderSummary = () => {
               </div>
               <button
                 className="bg-violet-500 text-white w-full p-2 rounded-md"
-                onClick={handleOrder}
+                onClick={handlePayment}
               >
                 Payment
               </button>

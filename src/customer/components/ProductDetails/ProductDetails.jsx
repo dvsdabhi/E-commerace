@@ -190,23 +190,27 @@ const ProductDetails = () => {
   const handleAddToCart = async (e) => {
     console.log("itemID---------------", P_ID);
     e.preventDefault();
-    try {
-      const res = await axios.post(
-        `https://node-mongodb-api-4zq2.onrender.com/api/cart`,
-        {
-          id: P_ID,
-          size: selectedOption
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+    if (selectedOption !== "") {
+      try {
+        const res = await axios.post(
+          `https://node-mongodb-api-4zq2.onrender.com/api/cart`,
+          {
+            id: P_ID,
+            size: selectedOption
           },
-        }
-      );
-      console.log("response.....---------->>", res);
-      toast.success(res.data.message);
-    } catch (error) {
-      toast.error(error.response.data.message);
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("response.....---------->>", res);
+        toast.success(res.data.message);
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }
+    }else{
+      alert("select size to continue");
     }
   };
 

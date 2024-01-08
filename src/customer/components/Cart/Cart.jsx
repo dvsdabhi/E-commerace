@@ -19,26 +19,30 @@ const Cart = () => {
   };
   const token = localStorage.getItem("authToken");
   const get_cart_product = async () => {
-    const res = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/cartitem`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setCartProduct(res.data.cartProduct);
-    let price = res.data.cartProduct.reduce((acc, tot) => {
-      return acc + tot.price * tot.quantity;
-    }, 0);
+    try {
+      const res = await axios.get(`https://node-mongodb-api-4zq2.onrender.com/api/cartitem`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCartProduct(res.data.cartProduct);
+      let price = res.data.cartProduct.reduce((acc, tot) => {
+        return acc + tot.price * tot.quantity;
+      }, 0);
 
-    let totalPrice = res.data.cartProduct.reduce((acc, tot) => {
-      return acc + tot.product.discountedPrice * tot.quantity;
-    }, 0);
+      let totalPrice = res.data.cartProduct.reduce((acc, tot) => {
+        return acc + tot.product.discountedPrice * tot.quantity;
+      }, 0);
 
-    let quantity = res.data.cartProduct.reduce((acc, tot) => {
-      return acc + tot.quantity;
-    }, 0);
-    setSubTotalItem(quantity);
-    setSubTotalPrice(price);
-    setTotalPrice(totalPrice);
+      let quantity = res.data.cartProduct.reduce((acc, tot) => {
+        return acc + tot.quantity;
+      }, 0);
+      setSubTotalItem(quantity);
+      setSubTotalPrice(price);
+      setTotalPrice(totalPrice);
+    }catch(error){
+      toast.error("Cart is empty");
+    }
   };
 
   const handleDelete = async (id) => {
@@ -63,19 +67,25 @@ const Cart = () => {
   return (
     <>
       <div className="lg:grid grid-cols-3 px-5 lg:px-16 relative mt-3 lg:space-x-5">
-        <div className="col-span-2 space-y-2">
-          {cartProduct.map((item) => (
-            <CartItem
-              cartProduct={item}
-              setSubTotalPrice={setSubTotalPrice}
-              subTotalPrice={subTotalPrice}
-              handleDelete={handleDelete}
-              quantity={quantity}
-              setQuantity={setQuantity}
-              handleQty={handleQty}
-            />
-          ))}
-        </div>
+        {cartProduct.length > 0 ? (
+          <div className="col-span-2 space-y-2">
+            {cartProduct.map((item) => (
+              <CartItem
+                cartProduct={item}
+                setSubTotalPrice={setSubTotalPrice}
+                subTotalPrice={subTotalPrice}
+                handleDelete={handleDelete}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                handleQty={handleQty}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="col-span-2 space-y-2">
+            <h1 className="font-bold text-xl">Your Cart Is Empty</h1>
+          </div>
+        )}
         <div className="p-5 sticky top-0 h-fit mt-5 lg:mt-0 shadow-custom">
           <div className="">
             <p className="uppercase opacity-60 font-bold pb-4">Price Details</p>
